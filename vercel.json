@@ -1,12 +1,8 @@
 {
-  "buildCommand": "next build",
-  "cleanUrls": true,
   "framework": "nextjs",
+  "cleanUrls": true,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "builds": [
-    {
-      "src": "next.config.js",
-      "use": "@vercel/next"
-    }
-  ]
+  "outputDirectory": ".next"
 } 
