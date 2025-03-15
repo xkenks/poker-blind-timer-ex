@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://poker-timer-ex.vercel.app
+
+# Sitemaps
+Sitemap: https://poker-timer-ex.vercel.app/sitemap.xml 

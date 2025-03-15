@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://poker-timer-ex.vercel.app</loc>
+    <lastmod>2024-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link 
+      rel="alternate" 
+      hreflang="ja" 
+      href="https://poker-timer-ex.vercel.app"
+      title="Poker Blind Timer EX | 本格的トーナメント用タイマー"
+    />
+    <xhtml:link 
+      rel="alternate" 
+      hreflang="en" 
+      href="https://poker-timer-ex.vercel.app"
+      title="Poker Blind Timer EX | Tournament Timer"
+    />
+  </url>
+  <url>
+    <loc>https://poker-timer-ex.vercel.app/privacy</loc>
+    <lastmod>2024-03-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://poker-timer-ex.vercel.app/terms</loc>
+    <lastmod>2024-03-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset> 
