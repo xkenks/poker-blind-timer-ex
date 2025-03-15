@@ -3,14 +3,14 @@ import { Providers } from './providers'
 import './globals.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://poker-blind-timer-ex.vercel.app'),
+  metadataBase: new URL('https://poker-blind-timer-ex.com'),
   title: 'Poker Blind Timer EX | 本格的トーナメント用タイマー',
   description: 'ポーカートーナメント運営に最適な高機能タイマー。ブラインド管理、プレイヤー管理、賞金管理など、トーナメントの運営に必要な機能を全て搭載。',
   keywords: 'ポーカー,トーナメント,タイマー,ブラインド,poker,tournament,timer',
   openGraph: {
     title: 'Poker Blind Timer EX | 本格的トーナメント用タイマー',
     description: 'ポーカートーナメント運営に最適な高機能タイマー。ブラインド管理、プレイヤー管理、賞金管理など、トーナメントの運営に必要な機能を全て搭載。',
-    url: 'https://poker-timer-ex.vercel.app',
+    url: 'https://poker-blind-timer-ex.com',
     siteName: 'Poker Blind Timer EX',
     locale: 'ja_JP',
     type: 'website',
@@ -32,10 +32,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://poker-timer-ex.vercel.app',
+    canonical: 'https://poker-blind-timer-ex.com',
     languages: {
-      'ja-JP': 'https://poker-timer-ex.vercel.app',
-      'en-US': 'https://poker-timer-ex.vercel.app',
+      'ja-JP': 'https://poker-blind-timer-ex.com',
+      'en-US': 'https://poker-blind-timer-ex.com',
     },
   },
   other: {
