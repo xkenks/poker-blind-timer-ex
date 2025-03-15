@@ -1,13 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "cleanUrls": true,
-  "installCommand": "npm install",
   "framework": "nextjs",
-  "outputDirectory": ".next",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ]
+  "cleanUrls": true
 } 
