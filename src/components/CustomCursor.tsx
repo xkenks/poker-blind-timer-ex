@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Box } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -34,35 +34,33 @@ export const CustomCursor = () => {
 
   return (
     <>
-      <Box
-        as={motion.div}
-        position="fixed"
-        zIndex="9999"
-        pointerEvents="none"
-        mixBlendMode="difference"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: isVisible ? 1 : 0,
-          x: position.x - (isPointer ? 16 : 4),
-          y: position.y - (isPointer ? 16 : 4),
-          scale: isPointer ? 2.5 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 150,
-          damping: 15,
-          mass: 0.1,
-        }}
-      >
-        <Box
-          width={isPointer ? '32px' : '8px'}
-          height={isPointer ? '32px' : '8px'}
-          bg="white"
-          borderRadius="full"
-          opacity={0.8}
-          transition="width 0.2s, height 0.2s"
-        />
-      </Box>
+      <AnimatePresence>
+        {isVisible && (
+          <motion.div
+            style={{
+              position: 'fixed',
+              zIndex: 9999,
+              pointerEvents: 'none',
+              mixBlendMode: 'difference',
+              left: position.x - (isPointer ? 16 : 4),
+              top: position.y - (isPointer ? 16 : 4),
+            }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: isPointer ? 2.5 : 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Box
+              width={isPointer ? '32px' : '8px'}
+              height={isPointer ? '32px' : '8px'}
+              bg="white"
+              borderRadius="full"
+              opacity={0.8}
+              transition="width 0.2s, height 0.2s"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <style jsx global>{`
         body {
           cursor: none;

@@ -4,6 +4,24 @@ import React from 'react';
 import { Box, Text, VStack, HStack, Divider } from '@chakra-ui/react';
 import { usePokerStore } from '../store/pokerStore';
 
+const PRIZE_TYPES = {
+  JPY: { label: '¥', prefix: '¥' },
+  USD: { label: '$', prefix: '$' },
+  COIN: { label: 'COIN', prefix: '' },
+  TICKET: { label: 'TICKET', prefix: '' },
+  ITEM: { label: 'Item', prefix: '' },
+} as const;
+
+type PrizeType = keyof typeof PRIZE_TYPES;
+
+const prizeTypeOptions = [
+  { value: 'USD', label: '$' },
+  { value: 'JPY', label: '¥' },
+  { value: 'COIN', label: 'COIN' },
+  { value: 'TICKET', label: 'TICKET' },
+  { value: 'ITEM', label: 'ITEM' },
+] as const;
+
 export const PrizePool = () => {
   const { prizePool } = usePokerStore();
 

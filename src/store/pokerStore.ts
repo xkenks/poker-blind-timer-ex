@@ -13,7 +13,7 @@ export type BlindLevel = {
 export interface Prize {
   id: number;
   position: number;
-  type: 'JPY' | 'USD' | 'COIN' | 'ITEM';
+  type: 'JPY' | 'USD' | 'COIN' | 'TICKET' | 'ITEM';
   amount: number | string;
   description?: string;
 }
