@@ -41,7 +41,7 @@ export default function Terms() {
           </Heading>
 
           <Text>
-            この利用規約（以下、「本規約」といいます。）は、Poker Timer EX（以下、「本サービス」といいます。）の利用条件を定めるものです。
+            この利用規約（以下、「本規約」といいます。）は、Poker Blind Timer EX（以下、「本サービス」といいます。）の利用条件を定めるものです。
           </Text>
 
           <VStack spacing={4} align="stretch">

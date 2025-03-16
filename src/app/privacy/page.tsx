@@ -41,7 +41,7 @@ export default function Privacy() {
           </Heading>
 
           <Text>
-            Poker Timer EX（以下、「本サービス」といいます。）は、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
+            Poker Blind Timer EX（以下、「本サービス」といいます。）は、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
           </Text>
 
           <VStack spacing={4} align="stretch">
