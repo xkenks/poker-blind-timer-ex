@@ -474,6 +474,10 @@ export const BlindSettings = memo(() => {
     <Box
       bg="white"
       p={6}
+      borderRadius="md"
+      borderColor="gray.200"
+      borderWidth="1px"
+      shadow="sm"
       width="100%"
     >
       <Tabs>
@@ -486,29 +490,9 @@ export const BlindSettings = memo(() => {
           <TabPanel>
             <VStack spacing={4} align="stretch" w="full">
               <Heading size="md">Blind Settings</Heading>
-              
-              <Box overflowX="auto" pb={2}>
-                <Box minW="800px">
-                  <HStack spacing={4} mb={4} px={4}>
-                    <Box w="40px" /> {/* For drag handle */}
-                    <Text w="50px" textAlign="center" fontWeight="bold" ml={1}>
-                      Level
-                    </Text>
-                    <Text w="120px" textAlign="center" fontWeight="bold">
-                      SB
-                    </Text>
-                    <Text w="120px" textAlign="center" fontWeight="bold">
-                      BB
-                    </Text>
-                    <Text w="120px" textAlign="center" fontWeight="bold">
-                      Ante
-                    </Text>
-                    <Text w="120px" textAlign="center" fontWeight="bold">
-                      Time
-                    </Text>
-                    <Box w="40px" /> {/* For delete button space */}
-                  </HStack>
 
+              <Box overflowX="auto">
+                <Box minW="800px">
                   <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
@@ -548,6 +532,8 @@ export const BlindSettings = memo(() => {
                 </Box>
               </Box>
               
+              <Divider my={2} />
+
               <HStack spacing={2}>
                 <Button
                   leftIcon={<AddIcon />}

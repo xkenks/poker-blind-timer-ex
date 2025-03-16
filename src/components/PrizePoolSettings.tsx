@@ -136,7 +136,11 @@ export const PrizePoolSettings = () => {
   return (
     <Box
       bg="white"
-      p={4}
+      p={6}
+      borderRadius="md"
+      borderColor="gray.200"
+      borderWidth="1px"
+      shadow="sm"
       width="100%"
     >
       <VStack spacing={4} align="stretch">

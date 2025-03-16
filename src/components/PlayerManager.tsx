@@ -75,8 +75,8 @@ export const PlayerManager = () => {
                   fontSize={["13px", "14px"]}
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
+                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
                 </NumberInputStepper>
               </NumberInput>
             </Td>
@@ -104,8 +104,8 @@ export const PlayerManager = () => {
                   fontSize={["13px", "14px"]}
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
+                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
                 </NumberInputStepper>
               </NumberInput>
             </Td>
@@ -134,8 +134,8 @@ export const PlayerManager = () => {
                   fontSize={["13px", "14px"]}
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
+                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
                 </NumberInputStepper>
               </NumberInput>
             </Td>
@@ -164,8 +164,8 @@ export const PlayerManager = () => {
                   fontSize={["13px", "14px"]}
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
+                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
                 </NumberInputStepper>
               </NumberInput>
             </Td>
