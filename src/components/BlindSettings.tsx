@@ -491,96 +491,114 @@ export const BlindSettings = memo(() => {
             <VStack spacing={4} align="stretch" w="full">
               <Heading size="md">Blind Settings</Heading>
 
-              <Box overflowX="auto">
-                <Box minW="800px">
-                  <DndContext
-                    sensors={sensors}
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                  >
-                    <SortableContext items={blindLevels} strategy={verticalListSortingStrategy}>
-                      <VStack spacing={2} align="stretch">
-                        {blindLevels.map((blind, index) => {
-                          let actualLevel = 1;
-                          for (let i = 0; i < index; i++) {
-                            if (!blindLevels[i].isBreak) {
-                              actualLevel++;
-                            }
-                          }
-                          
-                          return (
-                            <SortableItem
-                              key={blind.id}
-                              id={blind.id.toString()}
-                              level={actualLevel}
-                              sb={blind.smallBlind}
-                              bb={blind.bigBlind}
-                              ante={blind.ante}
-                              time={blind.duration}
-                              isBreak={blind.isBreak}
-                              onSbChange={(value) => handleBlindChange(index, "smallBlind", value.toString())}
-                              onBbChange={(value) => handleBlindChange(index, "bigBlind", value.toString())}
-                              onAnteChange={(value) => handleBlindChange(index, "ante", value.toString())}
-                              onTimeChange={(value) => handleBlindChange(index, "duration", value.toString())}
-                              onDelete={() => handleDelete(index)}
-                            />
-                          );
-                        })}
-                      </VStack>
-                    </SortableContext>
-                  </DndContext>
-                </Box>
-              </Box>
-              
-              <Divider my={2} />
-
-              <HStack spacing={2}>
-                <Button
-                  leftIcon={<AddIcon />}
-                  colorScheme="blue"
-                  onClick={() => {
-                    const newLevel = {
-                      id: blindLevels.length,
-                      smallBlind: 100,
-                      bigBlind: 200,
-                      ante: 0,
-                      duration: 15,
-                      isBreak: false
-                    };
-                    updateBlindLevels([...blindLevels, newLevel]);
-                  }}
-                  size="sm"
-                >
-                  Add Level
-                </Button>
-                <Button
-                  colorScheme="blue"
-                  onClick={addBreak}
-                  size="sm"
-                >
-                  Add Break
-                </Button>
-              </HStack>
-
-              <FormControl>
-                <FormLabel>Tournament Name</FormLabel>
-                <Input
-                  value={displayName}
-                  onChange={handleTournamentNameChange}
-                  placeholder="Enter tournament name"
-                />
-              </FormControl>
-
-              <Button
-                colorScheme="green"
-                onClick={handleSaveTournament}
-                isDisabled={!tournamentName}
-                size="sm"
-                width="auto"
-                alignSelf="flex-start"
+              <Box 
+                borderWidth="1px"
+                borderColor="gray.200"
+                borderRadius="md"
+                p={4}
+                bg="gray.50"
               >
-                Save
-              </Button>
+                <Box overflowX="auto">
+                  <Box minW="800px">
+                    <DndContext
+                      sensors={sensors}
+                      collisionDetection={closestCenter}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <SortableContext items={blindLevels} strategy={verticalListSortingStrategy}>
+                        <VStack spacing={2} align="stretch">
+                          {blindLevels.map((blind, index) => {
+                            let actualLevel = 1;
+                            for (let i = 0; i < index; i++) {
+                              if (!blindLevels[i].isBreak) {
+                                actualLevel++;
+                              }
+                            }
+                            
+                            return (
+                              <SortableItem
+                                key={blind.id}
+                                id={blind.id.toString()}
+                                level={actualLevel}
+                                sb={blind.smallBlind}
+                                bb={blind.bigBlind}
+                                ante={blind.ante}
+                                time={blind.duration}
+                                isBreak={blind.isBreak}
+                                onSbChange={(value) => handleBlindChange(index, "smallBlind", value.toString())}
+                                onBbChange={(value) => handleBlindChange(index, "bigBlind", value.toString())}
+                                onAnteChange={(value) => handleBlindChange(index, "ante", value.toString())}
+                                onTimeChange={(value) => handleBlindChange(index, "duration", value.toString())}
+                                onDelete={() => handleDelete(index)}
+                              />
+                            );
+                          })}
+                        </VStack>
+                      </SortableContext>
+                    </DndContext>
+                  </Box>
+                </Box>
+                
+                <Divider my={4} />
+
+                <HStack spacing={2}>
+                  <Button
+                    leftIcon={<AddIcon />}
+                    colorScheme="blue"
+                    onClick={() => {
+                      const newLevel = {
+                        id: blindLevels.length,
+                        smallBlind: 100,
+                        bigBlind: 200,
+                        ante: 0,
+                        duration: 15,
+                        isBreak: false
+                      };
+                      updateBlindLevels([...blindLevels, newLevel]);
+                    }}
+                    size="sm"
+                  >
+                    Add Level
+                  </Button>
+                  <Button
+                    colorScheme="blue"
+                    onClick={addBreak}
+                    size="sm"
+                  >
+                    Add Break
+                  </Button>
+                </HStack>
+              </Box>
+
+              <Box
+                borderWidth="1px"
+                borderColor="gray.200"
+                borderRadius="md"
+                p={4}
+                bg="gray.50"
+              >
+                <FormControl>
+                  <FormLabel>Tournament Name</FormLabel>
+                  <Input
+                    value={displayName}
+                    onChange={handleTournamentNameChange}
+                    placeholder="Enter tournament name"
+                    bg="white"
+                  />
+                </FormControl>
+
+                <Button
+                  colorScheme="green"
+                  onClick={handleSaveTournament}
+                  isDisabled={!tournamentName}
+                  size="sm"
+                  width="auto"
+                  alignSelf="flex-start"
+                  mt={4}
+                >
+                  Save
+                </Button>
+              </Box>
             </VStack>
           </TabPanel>
 
