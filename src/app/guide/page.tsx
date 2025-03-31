@@ -53,8 +53,7 @@ const GuidePage = () => {
       {/* ヘッダー */}
       <Box bg="blue.50" color="black" py={4} position="sticky" top={0} zIndex={10}>
         <Container maxW="container.xl">
-          <Flex justify="space-between" align="center">
-            <Heading as="h1" size="lg">ポーカー ブラインドタイマー ガイド</Heading>
+          <Flex justify="flex-end" align="center">
             <HStack spacing={4}>
               <Link href="/" passHref legacyBehavior>
                 <Button as="a" colorScheme="blue" variant="solid" size="sm">
