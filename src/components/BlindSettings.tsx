@@ -241,18 +241,18 @@ const SortableItem = ({
       style={style} 
       spacing={4} 
       position="relative"
-      minW="800px"
+      minW={["100%", "100%", "800px"]}
       px={4}
       py={3}
-      bg="white"
+      bg={isBreak ? "blue.50" : "white"}
       borderWidth="1px"
       borderRadius="md"
       _hover={{ 
-        borderColor: "blue.200"
+        borderColor: isBreak ? "blue.300" : "blue.200"
       }}
       transition="all 0.2s"
       boxShadow={isDragging ? "lg" : "none"}
-      borderColor={isDragging ? "blue.400" : "gray.200"}
+      borderColor={isDragging ? "blue.400" : isBreak ? "blue.200" : "gray.200"}
     >
       <Box
         {...attributes}
@@ -273,87 +273,153 @@ const SortableItem = ({
           color="gray.400"
         />
       </Box>
-      <Text w="50px" textAlign="center" color={isBreak ? "blue.500" : "inherit"} fontWeight={isBreak ? "bold" : "normal"}>
-        {isBreak ? "Break" : level}
+      <Text 
+        w="50px" 
+        textAlign="center" 
+        color={isBreak ? "blue.500" : "inherit"} 
+        fontWeight="bold"
+        fontSize={["sm", "md"]}
+      >
+        {isBreak ? "Break" : `Level ${level}`}
       </Text>
       {isBreak ? (
         <>
-          <Box w="120px" />
-          <Box w="120px" />
-          <Box w="120px" />
-          <NumberInput
-            value={time}
-            onChange={(_, value) => onTimeChange(value)}
-            min={0}
-            w="120px"
-            size="lg"
-          >
-            <NumberInputField
-              fontSize="16px"
-              textAlign="right"
-              paddingRight="8px"
-              height="44px"
-            />
-          </NumberInput>
+          <Flex direction="column" align="center" justify="center" w="360px">
+            <Text fontSize="sm" color="blue.500" fontWeight="bold">BREAK TIME</Text>
+          </Flex>
+          <Box>
+            <Text fontSize="xs" color="gray.500" mb={1}>時間 (分)</Text>
+            <NumberInput
+              value={time}
+              onChange={(_, value) => onTimeChange(value)}
+              min={0}
+              w="120px"
+              size="lg"
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                color="blue.700"
+                fontWeight="bold"
+                borderColor="blue.300"
+                _hover={{ borderColor: "blue.400" }}
+                bg="white"
+              />
+              <NumberInputStepper>
+                <NumberIncrementStepper bg="blue.500" color="white" _hover={{ bg: "blue.600" }} />
+                <NumberDecrementStepper bg="blue.500" color="white" _hover={{ bg: "blue.600" }} />
+              </NumberInputStepper>
+            </NumberInput>
+          </Box>
         </>
       ) : (
         <>
-          <NumberInput
-            value={sb}
-            onChange={(_, value) => onSbChange(value)}
-            min={0}
-            w="120px"
-            size="lg"
-          >
-            <NumberInputField
-              fontSize="16px"
-              textAlign="right"
-              paddingRight="8px"
-              height="44px"
-            />
-          </NumberInput>
-          <NumberInput
-            value={bb}
-            onChange={(_, value) => onBbChange(value)}
-            min={0}
-            w="120px"
-            size="lg"
-          >
-            <NumberInputField
-              fontSize="16px"
-              textAlign="right"
-              paddingRight="8px"
-              height="44px"
-            />
-          </NumberInput>
-          <NumberInput
-            value={ante}
-            onChange={(_, value) => onAnteChange(value)}
-            min={0}
-            w="120px"
-            size="lg"
-          >
-            <NumberInputField
-              fontSize="16px"
-              textAlign="right"
-              paddingRight="8px"
-              height="44px"
-            />
-          </NumberInput>
-          <NumberInput
-            value={time}
-            onChange={(_, value) => onTimeChange(value)}
-            min={0}
-            w="120px"
-            size="lg"
-          >
-            <NumberInputField
-              fontSize="16px"
-              textAlign="right"
-              paddingRight="8px"
-              height="44px"
-            />
-          </NumberInput>
+          <Box>
+            <Text fontSize="xs" color="gray.500" mb={1}>SB</Text>
+            <NumberInput
+              value={sb}
+              onChange={(_, value) => onSbChange(value)}
+              min={0}
+              w="120px"
+              size="lg"
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                color="black"
+                fontWeight="bold"
+                borderColor="green.200"
+                _hover={{ borderColor: "green.300" }}
+                bg="white"
+              />
+              <NumberInputStepper>
+                <NumberIncrementStepper bg="green.500" color="white" _hover={{ bg: "green.600" }} />
+                <NumberDecrementStepper bg="green.500" color="white" _hover={{ bg: "green.600" }} />
+              </NumberInputStepper>
+            </NumberInput>
+          </Box>
+          <Box>
+            <Text fontSize="xs" color="gray.500" mb={1}>BB</Text>
+            <NumberInput
+              value={bb}
+              onChange={(_, value) => onBbChange(value)}
+              min={0}
+              w="120px"
+              size="lg"
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                color="black"
+                fontWeight="bold"
+                borderColor="red.200"
+                _hover={{ borderColor: "red.300" }}
+                bg="white"
+              />
+              <NumberInputStepper>
+                <NumberIncrementStepper bg="red.500" color="white" _hover={{ bg: "red.600" }} />
+                <NumberDecrementStepper bg="red.500" color="white" _hover={{ bg: "red.600" }} />
+              </NumberInputStepper>
+            </NumberInput>
+          </Box>
+          <Box>
+            <Text fontSize="xs" color="gray.500" mb={1}>Ante</Text>
+            <NumberInput
+              value={ante}
+              onChange={(_, value) => onAnteChange(value)}
+              min={0}
+              w="120px"
+              size="lg"
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                color="black"
+                fontWeight="bold"
+                borderColor="purple.200"
+                _hover={{ borderColor: "purple.300" }}
+                bg="white"
+              />
+              <NumberInputStepper>
+                <NumberIncrementStepper bg="purple.500" color="white" _hover={{ bg: "purple.600" }} />
+                <NumberDecrementStepper bg="purple.500" color="white" _hover={{ bg: "purple.600" }} />
+              </NumberInputStepper>
+            </NumberInput>
+          </Box>
+          <Box>
+            <Text fontSize="xs" color="gray.500" mb={1}>時間 (分)</Text>
+            <NumberInput
+              value={time}
+              onChange={(_, value) => onTimeChange(value)}
+              min={0}
+              w="120px"
+              size="lg"
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                color="black"
+                fontWeight="bold"
+                borderColor="orange.200"
+                _hover={{ borderColor: "orange.300" }}
+                bg="white"
+              />
+              <NumberInputStepper>
+                <NumberIncrementStepper bg="orange.500" color="white" _hover={{ bg: "orange.600" }} />
+                <NumberDecrementStepper bg="orange.500" color="white" _hover={{ bg: "orange.600" }} />
+              </NumberInputStepper>
+            </NumberInput>
+          </Box>
         </>
       )}
       <IconButton
@@ -509,35 +575,57 @@ export const BlindSettings = memo(() => {
     >
       <Box
         bg="white"
-        p={6}
+        p={[3, 4, 6]}
         borderRadius="md"
         borderColor="gray.200"
         borderWidth="1px"
         shadow="sm"
         width="100%"
+        overflowX="auto"
       >
         <Tabs>
           <TabList>
-            <Tab>Blind Settings</Tab>
-            <Tab>Saved Tournaments</Tab>
+            <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>Blind Settings</Tab>
+            <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>Saved Tournaments</Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel>
               <VStack spacing={4} align="stretch" w="full">
-                <Heading size="md">Blind Settings</Heading>
-
-                <Box 
-                  borderWidth="1px"
-                  borderColor="gray.200"
-                  borderRadius="md"
-                  p={4}
-                  bg="gray.50"
-                >
-                  <Box overflowX="auto">
-                    <Box minW="800px">
+                <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                  <Heading size="md">ブラインド設定</Heading>
+                  <Text fontSize="sm" color="gray.600" mt={[2, 0]}>
+                    ※ドラッグ＆ドロップで順序を変更できます
+                  </Text>
+                </Box>
+                
+                <Box overflowX="auto">
+                  <Box 
+                    borderWidth="1px"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    p={4}
+                    bg="gray.50"
+                    minW={["100%", "100%", "800px"]}
+                  >
+                    <Grid 
+                      templateColumns={["1fr", "1fr", "50px 1fr 1fr 1fr 1fr 50px"]} 
+                      gap={4} 
+                      pb={2} 
+                      px={4} 
+                      display={["none", "none", "grid"]}
+                    >
+                      <Text fontWeight="bold" fontSize="sm" color="gray.500"></Text>
+                      <Text fontWeight="bold" fontSize="sm" color="gray.500" textAlign="center">Small Blind</Text>
+                      <Text fontWeight="bold" fontSize="sm" color="gray.500" textAlign="center">Big Blind</Text>
+                      <Text fontWeight="bold" fontSize="sm" color="gray.500" textAlign="center">Ante</Text>
+                      <Text fontWeight="bold" fontSize="sm" color="gray.500" textAlign="center">Time (minutes)</Text>
+                      <Text fontWeight="bold" fontSize="sm" color="gray.500"></Text>
+                    </Grid>
+                    
+                    <Box minW={["100%", "100%", "800px"]}>
                       <SortableContext items={blindLevels} strategy={verticalListSortingStrategy}>
-                        <VStack spacing={0} align="stretch">
+                        <VStack spacing={2} align="stretch">
                           {blindLevels.map((blind, index) => {
                             let actualLevel = 1;
                             for (let i = 0; i < index; i++) {
@@ -590,51 +678,60 @@ export const BlindSettings = memo(() => {
                         </VStack>
                       </SortableContext>
                     </Box>
-                  </Box>
                   
-                  <Divider my={4} />
+                    <Divider my={4} />
 
-                  <HStack spacing={2}>
-                    <Button
-                      leftIcon={<AddIcon />}
-                      colorScheme="blue"
-                      onClick={() => {
-                        const lastLevel = blindLevels[blindLevels.length - 1];
-                        let newSmallBlind = 100;
-                        let newBigBlind = 200;
-                        let newAnte = 0;
-                        let newDuration = 15;
+                    <HStack spacing={2} flexWrap="wrap" justifyContent={["center", "flex-start"]}>
+                      <Button
+                        leftIcon={<AddIcon />}
+                        colorScheme="blue"
+                        onClick={() => {
+                          const lastLevel = blindLevels[blindLevels.length - 1];
+                          let newSmallBlind = 100;
+                          let newBigBlind = 200;
+                          let newAnte = 0;
+                          let newDuration = 15;
 
-                        // 前のレベルが存在し、ブレイクでない場合は値を2倍にする
-                        if (lastLevel && !lastLevel.isBreak) {
-                          newSmallBlind = lastLevel.smallBlind * 2;
-                          newBigBlind = lastLevel.bigBlind * 2;
-                          newAnte = lastLevel.ante > 0 ? lastLevel.ante * 2 : 0;
-                          newDuration = lastLevel.duration;
-                        }
+                          // 前のレベルが存在し、ブレイクでない場合は値を2倍にする
+                          if (lastLevel && !lastLevel.isBreak) {
+                            newSmallBlind = lastLevel.smallBlind * 2;
+                            newBigBlind = lastLevel.bigBlind * 2;
+                            newAnte = lastLevel.ante > 0 ? lastLevel.ante * 2 : 0;
+                            newDuration = lastLevel.duration;
+                          }
 
-                        const newLevel = {
-                          id: blindLevels.length,
-                          smallBlind: newSmallBlind,
-                          bigBlind: newBigBlind,
-                          ante: newAnte,
-                          duration: newDuration,
-                          isBreak: false
-                        };
-                        updateBlindLevels([...blindLevels, newLevel]);
-                      }}
-                      size="sm"
-                    >
-                      Add Level
-                    </Button>
-                    <Button
-                      colorScheme="blue"
-                      onClick={addBreak}
-                      size="sm"
-                    >
-                      Add Break
-                    </Button>
-                  </HStack>
+                          const newLevel = {
+                            id: blindLevels.length,
+                            smallBlind: newSmallBlind,
+                            bigBlind: newBigBlind,
+                            ante: newAnte,
+                            duration: newDuration,
+                            isBreak: false
+                          };
+                          updateBlindLevels([...blindLevels, newLevel]);
+                          toast({
+                            title: 'レベル追加',
+                            description: '新しいブラインドレベルを追加しました',
+                            status: 'success',
+                            duration: 2000,
+                            isClosable: true,
+                          });
+                        }}
+                        size="md"
+                        mb={[2, 0]}
+                      >
+                        ブラインドレベル追加
+                      </Button>
+                      <Button
+                        colorScheme="teal"
+                        onClick={addBreak}
+                        size="md"
+                        mb={[2, 0]}
+                      >
+                        休憩追加
+                      </Button>
+                    </HStack>
+                  </Box>
                 </Box>
 
                 <Box
@@ -645,12 +742,15 @@ export const BlindSettings = memo(() => {
                   bg="gray.50"
                 >
                   <FormControl>
-                    <FormLabel>Tournament Name</FormLabel>
+                    <FormLabel fontWeight="bold">トーナメント名</FormLabel>
                     <Input
                       value={displayName}
                       onChange={handleTournamentNameChange}
-                      placeholder="Enter tournament name"
+                      placeholder="トーナメント名を入力"
                       bg="white"
+                      borderColor="blue.200"
+                      _hover={{ borderColor: "blue.300" }}
+                      fontWeight="medium"
                     />
                   </FormControl>
 
@@ -658,12 +758,13 @@ export const BlindSettings = memo(() => {
                     colorScheme="green"
                     onClick={handleSaveTournament}
                     isDisabled={!tournamentName}
-                    size="sm"
-                    width="auto"
+                    size="md"
+                    width={["100%", "auto"]}
                     alignSelf="flex-start"
                     mt={4}
+                    leftIcon={<CheckIcon />}
                   >
-                    Save
+                    保存
                   </Button>
                 </Box>
               </VStack>
@@ -672,30 +773,40 @@ export const BlindSettings = memo(() => {
             <TabPanel>
               <VStack spacing={4} align="stretch">
                 <Text fontSize="xl" fontWeight="bold">
-                  Saved Tournaments
+                  保存済みトーナメント
                 </Text>
-                <Table variant="unstyled">
-                  <Thead>
-                    <Tr>
-                      <Th>Name</Th>
-                      <Th>Created At</Th>
-                      <Th>Actions</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {savedTournaments.map((tournament) => (
-                      <SavedTournamentRow
-                        key={tournament.id}
-                        tournament={tournament}
-                        onLoad={handleLoadTournament}
-                        onDeleteClick={(id) => {
-                          setSelectedTournamentId(id);
-                          onOpen();
-                        }}
-                      />
-                    ))}
-                  </Tbody>
-                </Table>
+                <Box overflowX="auto">
+                  <Table variant="simple" colorScheme="blue">
+                    <Thead bg="blue.50">
+                      <Tr>
+                        <Th>名称</Th>
+                        <Th>作成日時</Th>
+                        <Th>操作</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {savedTournaments.length === 0 ? (
+                        <Tr>
+                          <Td colSpan={3} textAlign="center" py={8}>
+                            <Text color="gray.500">保存されたトーナメントはありません</Text>
+                          </Td>
+                        </Tr>
+                      ) : (
+                        savedTournaments.map((tournament) => (
+                          <SavedTournamentRow
+                            key={tournament.id}
+                            tournament={tournament}
+                            onLoad={handleLoadTournament}
+                            onDeleteClick={(id) => {
+                              setSelectedTournamentId(id);
+                              onOpen();
+                            }}
+                          />
+                        ))
+                      )}
+                    </Tbody>
+                  </Table>
+                </Box>
               </VStack>
             </TabPanel>
           </TabPanels>
@@ -709,25 +820,26 @@ export const BlindSettings = memo(() => {
           <AlertDialogOverlay>
             <AlertDialogContent>
               <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Delete Tournament
+                トーナメント削除
               </AlertDialogHeader>
 
               <AlertDialogBody>
-                Are you sure? This action cannot be undone.
+                本当に削除しますか？この操作は元に戻せません。
               </AlertDialogBody>
 
               <AlertDialogFooter>
                 <Button ref={cancelRef} onClick={onClose}>
-                  Cancel
+                  キャンセル
                 </Button>
                 <Button colorScheme="red" onClick={handleConfirmDelete} ml={3}>
-                  Delete
+                  削除
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialogOverlay>
         </AlertDialog>
       </Box>
+      
       <DragOverlay>
         {activeId ? (
           <Box
