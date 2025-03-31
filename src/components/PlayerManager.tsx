@@ -14,6 +14,21 @@ import {
   Tr,
   Th,
   Td,
+  Flex,
+  SimpleGrid,
+  Badge,
+  Heading,
+  FormControl,
+  FormLabel,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider
 } from '@chakra-ui/react';
 import { usePokerStore } from '../store/pokerStore';
 
@@ -39,28 +54,47 @@ export const PlayerManager = () => {
   return (
     <Box
       bg="white"
-      p={6}
+      p={[4, 4, 5, 6]}
       borderRadius="md"
       borderColor="gray.200"
       borderWidth="1px"
       shadow="sm"
       width="100%"
+      maxWidth={["100%", "100%", "100%", "900px"]}
+      mx="auto"
     >
-      <Text fontSize="xl" fontWeight="bold" mb={4}>
+      <Text fontSize={["xl", "xl"]} fontWeight="bold" mb={[4, 4]}>
         Player Management
       </Text>
-      <Table variant="simple">
-        <Thead>
-          <Tr>
-            <Th width="200px">Item</Th>
-            <Th>Value</Th>
-            <Th width="200px">Current Status</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          <Tr>
-            <Td>Initial Players</Td>
-            <Td>
+
+      {/* モバイルビュー（スモールスクリーン） */}
+      <Box display={["block", "block", "none"]}>
+        <SimpleGrid columns={1} spacing={5} width="100%">
+          {/* 現在の状況サマリー (モバイル) */}
+          <Card variant="filled" bg="gray.50" p={3} shadow="md" borderRadius="lg">
+            <CardBody>
+              <Flex direction="column" align="center" justify="center">
+                <Badge colorScheme="blue" fontSize="md" mb={3} p={2} borderRadius="md">
+                  Current Status
+                </Badge>
+                <Text fontSize="xl" fontWeight="bold" color="gray.700" textAlign="center">
+                  {currentPlayers}/{totalPlayers} Players
+                </Text>
+                <Text fontSize="lg" fontWeight="medium" color="gray.700" textAlign="center" mt={2}>
+                  Average Stack: {averageStack.toLocaleString()}
+                </Text>
+              </Flex>
+            </CardBody>
+          </Card>
+
+          {/* 初期プレイヤー数 (モバイル) */}
+          <Card shadow="md" borderRadius="lg">
+            <CardHeader pb={1}>
+              <FormLabel fontSize="md" fontWeight="bold" mb={0}>
+                Initial Players
+              </FormLabel>
+            </CardHeader>
+            <CardBody pt={2}>
               <NumberInput
                 value={initialPlayers}
                 onChange={(_, value) => updatePlayerState({ initialPlayers: value })}
@@ -69,27 +103,34 @@ export const PlayerManager = () => {
               >
                 <NumberInputField 
                   bg="white" 
-                  borderColor="gray.300"
+                  borderColor="blue.200"
+                  _hover={{ borderColor: "blue.300" }}
                   textAlign="right"
-                  paddingRight="35px"
-                  fontSize={["13px", "14px"]}
+                  paddingRight="36px"
+                  fontSize="18px"
+                  height="48px"
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
-                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberIncrementStepper bg="blue.500" color="white" _hover={{ bg: 'blue.600' }} />
+                  <NumberDecrementStepper bg="blue.500" color="white" _hover={{ bg: 'blue.600' }} />
                 </NumberInputStepper>
               </NumberInput>
-            </Td>
-            <Td>
-              <Text fontWeight="bold" color="blue.600">
+            </CardBody>
+            <CardFooter pt={0}>
+              <Badge colorScheme="blue" variant="solid" fontSize="md" p={2} borderRadius="md">
                 {initialPlayers} players
-              </Text>
-            </Td>
-          </Tr>
-          
-          <Tr>
-            <Td>Rebuys</Td>
-            <Td>
+              </Badge>
+            </CardFooter>
+          </Card>
+
+          {/* リバイ回数 (モバイル) */}
+          <Card shadow="md" borderRadius="lg">
+            <CardHeader pb={1}>
+              <FormLabel fontSize="md" fontWeight="bold" mb={0}>
+                Rebuys
+              </FormLabel>
+            </CardHeader>
+            <CardBody pt={2}>
               <NumberInput
                 value={rebuys}
                 onChange={(_, value) => updatePlayerState({ rebuys: value })}
@@ -98,27 +139,34 @@ export const PlayerManager = () => {
               >
                 <NumberInputField 
                   bg="white" 
-                  borderColor="gray.300"
+                  borderColor="green.200"
+                  _hover={{ borderColor: "green.300" }}
                   textAlign="right"
-                  paddingRight="35px"
-                  fontSize={["13px", "14px"]}
+                  paddingRight="36px"
+                  fontSize="18px"
+                  height="48px"
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
-                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberIncrementStepper bg="green.500" color="white" _hover={{ bg: 'green.600' }} />
+                  <NumberDecrementStepper bg="green.500" color="white" _hover={{ bg: 'green.600' }} />
                 </NumberInputStepper>
               </NumberInput>
-            </Td>
-            <Td>
-              <Text fontWeight="bold" color="green.600">
+            </CardBody>
+            <CardFooter pt={0}>
+              <Badge colorScheme="green" variant="solid" fontSize="md" p={2} borderRadius="md">
                 {rebuys} times
-              </Text>
-            </Td>
-          </Tr>
-          
-          <Tr>
-            <Td>Players Out</Td>
-            <Td>
+              </Badge>
+            </CardFooter>
+          </Card>
+
+          {/* 脱落プレイヤー数 (モバイル) */}
+          <Card shadow="md" borderRadius="lg">
+            <CardHeader pb={1}>
+              <FormLabel fontSize="md" fontWeight="bold" mb={0}>
+                Eliminated Players
+              </FormLabel>
+            </CardHeader>
+            <CardBody pt={2}>
               <NumberInput
                 value={playersOut}
                 onChange={(_, value) => updatePlayerState({ playersOut: value })}
@@ -128,27 +176,34 @@ export const PlayerManager = () => {
               >
                 <NumberInputField 
                   bg="white" 
-                  borderColor="gray.300"
+                  borderColor="red.200"
+                  _hover={{ borderColor: "red.300" }}
                   textAlign="right"
-                  paddingRight="35px"
-                  fontSize={["13px", "14px"]}
+                  paddingRight="36px"
+                  fontSize="18px"
+                  height="48px"
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
-                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberIncrementStepper bg="red.500" color="white" _hover={{ bg: 'red.600' }} />
+                  <NumberDecrementStepper bg="red.500" color="white" _hover={{ bg: 'red.600' }} />
                 </NumberInputStepper>
               </NumberInput>
-            </Td>
-            <Td>
-              <Text fontWeight="bold" color="red.600">
+            </CardBody>
+            <CardFooter pt={0}>
+              <Badge colorScheme="red" variant="solid" fontSize="md" p={2} borderRadius="md">
                 {playersOut} players
-              </Text>
-            </Td>
-          </Tr>
-          
-          <Tr>
-            <Td>Initial Stack</Td>
-            <Td>
+              </Badge>
+            </CardFooter>
+          </Card>
+
+          {/* 初期スタック (モバイル) */}
+          <Card shadow="md" borderRadius="lg">
+            <CardHeader pb={1}>
+              <FormLabel fontSize="md" fontWeight="bold" mb={0}>
+                Initial Stack
+              </FormLabel>
+            </CardHeader>
+            <CardBody pt={2}>
               <NumberInput
                 value={initialStack}
                 onChange={(_, value) => updatePlayerState({ initialStack: value })}
@@ -158,35 +213,181 @@ export const PlayerManager = () => {
               >
                 <NumberInputField 
                   bg="white" 
-                  borderColor="gray.300"
+                  borderColor="purple.200"
+                  _hover={{ borderColor: "purple.300" }}
                   textAlign="right"
-                  paddingRight="35px"
-                  fontSize={["13px", "14px"]}
+                  paddingRight="36px"
+                  fontSize="18px"
+                  height="48px"
                 />
                 <NumberInputStepper>
-                  <NumberIncrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
-                  <NumberDecrementStepper bg="gray.900" color="white" _hover={{ bg: 'gray.700' }} />
+                  <NumberIncrementStepper bg="purple.500" color="white" _hover={{ bg: 'purple.600' }} />
+                  <NumberDecrementStepper bg="purple.500" color="white" _hover={{ bg: 'purple.600' }} />
                 </NumberInputStepper>
               </NumberInput>
-            </Td>
-            <Td>
-              <Text fontWeight="bold" color="purple.600">
+            </CardBody>
+            <CardFooter pt={0}>
+              <Badge colorScheme="purple" variant="solid" fontSize="md" p={2} borderRadius="md">
                 {initialStack.toLocaleString()}
-              </Text>
-            </Td>
-          </Tr>
+              </Badge>
+            </CardFooter>
+          </Card>
+        </SimpleGrid>
+      </Box>
 
-          <Tr bg="gray.50">
-            <Td fontWeight="bold">Current Status</Td>
-            <Td colSpan={2}>
-              <Text fontSize="lg" fontWeight="bold" color="gray.700">
-                {currentPlayers}/{totalPlayers} players　
-                Average Stack: {averageStack.toLocaleString()}
-              </Text>
-            </Td>
-          </Tr>
-        </Tbody>
-      </Table>
+      {/* デスクトップビュー（ラージスクリーン） */}
+      <Box display={["none", "none", "block"]} overflowX="auto" className="desktop-view">
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th width="200px" fontSize={["sm", "md"]}>Item</Th>
+              <Th fontSize={["sm", "md"]}>Value</Th>
+              <Th width="200px" fontSize={["sm", "md"]}>Current Status</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            <Tr>
+              <Td fontWeight="medium">Initial Players</Td>
+              <Td>
+                <NumberInput
+                  value={initialPlayers}
+                  onChange={(_, value) => updatePlayerState({ initialPlayers: value })}
+                  min={0}
+                  size="md"
+                >
+                  <NumberInputField 
+                    bg="white" 
+                    borderColor="blue.200"
+                    _hover={{ borderColor: "blue.300" }}
+                    textAlign="right"
+                    paddingRight="30px"
+                    fontSize="16px"
+                    height="40px"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper bg="blue.500" color="white" _hover={{ bg: 'blue.600' }} />
+                    <NumberDecrementStepper bg="blue.500" color="white" _hover={{ bg: 'blue.600' }} />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Td>
+              <Td>
+                <Badge colorScheme="blue" p={2} borderRadius="md" fontSize="md">
+                  {initialPlayers} players
+                </Badge>
+              </Td>
+            </Tr>
+            
+            <Tr>
+              <Td fontWeight="medium">Rebuys</Td>
+              <Td>
+                <NumberInput
+                  value={rebuys}
+                  onChange={(_, value) => updatePlayerState({ rebuys: value })}
+                  min={0}
+                  size="md"
+                >
+                  <NumberInputField 
+                    bg="white" 
+                    borderColor="green.200"
+                    _hover={{ borderColor: "green.300" }}
+                    textAlign="right"
+                    paddingRight="30px"
+                    fontSize="16px"
+                    height="40px"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper bg="green.500" color="white" _hover={{ bg: 'green.600' }} />
+                    <NumberDecrementStepper bg="green.500" color="white" _hover={{ bg: 'green.600' }} />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Td>
+              <Td>
+                <Badge colorScheme="green" p={2} borderRadius="md" fontSize="md">
+                  {rebuys} times
+                </Badge>
+              </Td>
+            </Tr>
+            
+            <Tr>
+              <Td fontWeight="medium">Eliminated Players</Td>
+              <Td>
+                <NumberInput
+                  value={playersOut}
+                  onChange={(_, value) => updatePlayerState({ playersOut: value })}
+                  min={0}
+                  max={totalPlayers}
+                  size="md"
+                >
+                  <NumberInputField 
+                    bg="white" 
+                    borderColor="red.200"
+                    _hover={{ borderColor: "red.300" }}
+                    textAlign="right"
+                    paddingRight="30px"
+                    fontSize="16px"
+                    height="40px"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper bg="red.500" color="white" _hover={{ bg: 'red.600' }} />
+                    <NumberDecrementStepper bg="red.500" color="white" _hover={{ bg: 'red.600' }} />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Td>
+              <Td>
+                <Badge colorScheme="red" p={2} borderRadius="md" fontSize="md">
+                  {playersOut} players
+                </Badge>
+              </Td>
+            </Tr>
+            
+            <Tr>
+              <Td fontWeight="medium">Initial Stack</Td>
+              <Td>
+                <NumberInput
+                  value={initialStack}
+                  onChange={(_, value) => updatePlayerState({ initialStack: value })}
+                  min={0}
+                  step={1000}
+                  size="md"
+                >
+                  <NumberInputField 
+                    bg="white" 
+                    borderColor="purple.200"
+                    _hover={{ borderColor: "purple.300" }}
+                    textAlign="right"
+                    paddingRight="30px"
+                    fontSize="16px"
+                    height="40px"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper bg="purple.500" color="white" _hover={{ bg: 'purple.600' }} />
+                    <NumberDecrementStepper bg="purple.500" color="white" _hover={{ bg: 'purple.600' }} />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Td>
+              <Td>
+                <Badge colorScheme="purple" p={2} borderRadius="md" fontSize="md">
+                  {initialStack.toLocaleString()}
+                </Badge>
+              </Td>
+            </Tr>
+
+            <Tr bg="gray.50">
+              <Td fontWeight="bold">Current Status</Td>
+              <Td colSpan={2}>
+                <Flex align="center" gap={4}>
+                  <Badge colorScheme="blue" p={2} borderRadius="md" fontSize="md">
+                    Remaining {currentPlayers}/{totalPlayers} players
+                  </Badge>
+                  <Badge colorScheme="purple" p={2} borderRadius="md" fontSize="md">
+                    Average Stack: {averageStack.toLocaleString()}
+                  </Badge>
+                </Flex>
+              </Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      </Box>
     </Box>
   );
 }; 

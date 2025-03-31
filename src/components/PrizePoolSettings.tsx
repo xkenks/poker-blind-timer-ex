@@ -22,16 +22,20 @@ import {
   VStack,
   Thead,
   Th,
+  Badge,
+  Flex,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { usePokerStore, Prize } from '../store/pokerStore';
 
 const PRIZE_TYPES = {
-  JPY: { label: '¥', prefix: '¥' },
-  USD: { label: '$', prefix: '$' },
-  COIN: { label: 'COIN', prefix: '' },
-  TICKET: { label: 'TICKET', prefix: '' },
-  ITEM: { label: 'Item', prefix: '' },
+  JPY: { label: '¥', prefix: '¥', color: 'green' },
+  USD: { label: '$', prefix: '$', color: 'blue' },
+  COIN: { label: 'COIN', prefix: '', color: 'yellow' },
+  TICKET: { label: 'TICKET', prefix: '', color: 'purple' },
+  ITEM: { label: 'Item', prefix: '', color: 'red' },
 };
 
 const getOrdinal = (position: number) => {
@@ -133,45 +137,150 @@ export const PrizePoolSettings = () => {
     }
   };
 
+  // Prize Typeに対応するバッジの色を取得
+  const getPrizeTypeBadgeColor = (type: Prize['type']) => {
+    return PRIZE_TYPES[type]?.color || 'gray';
+  };
+
   return (
     <Box
       bg="white"
-      p={6}
+      p={[3, 4, 5, 6]}
       borderRadius="md"
       borderColor="gray.200"
       borderWidth="1px"
       shadow="sm"
       width="100%"
+      maxWidth={["100%", "100%", "100%", "900px"]}
+      mx="auto"
     >
       <VStack spacing={4} align="stretch">
-        <HStack justify="space-between" align="center">
-          <Text fontSize="xl" fontWeight="bold">Prize Pool Settings</Text>
+        <Flex 
+          justify="space-between" 
+          align="center" 
+          flexDir={["column", "column", "row"]}
+          gap={2}
+        >
+          <Text fontSize={["lg", "xl"]} fontWeight="bold">Prize Pool Settings</Text>
           <Button
             leftIcon={<AddIcon />}
             colorScheme="blue"
             variant="ghost"
-            size="sm"
+            size={["sm", "md"]}
             onClick={handleAddPrize}
           >
             Add Prize
           </Button>
-        </HStack>
+        </Flex>
 
-        <Box overflowX="auto">
+        {/* モバイルビュー（スモールスクリーン） */}
+        <Box display={["block", "block", "none"]}>
+          {localPrizes.map((prize, index) => (
+            <Box 
+              key={prize.position}
+              p={3}
+              mb={3}
+              borderWidth="1px"
+              borderRadius="md"
+              borderColor="gray.200"
+              position="relative"
+            >
+              <Flex justify="space-between" mb={3}>
+                <Badge
+                  colorScheme={getPrizeTypeBadgeColor(prize.type)}
+                  fontSize="sm"
+                  p={1}
+                  borderRadius="md"
+                >
+                  {index + 1}{getOrdinalSuffix(index + 1)} Place
+                </Badge>
+                <Badge
+                  colorScheme={getPrizeTypeBadgeColor(prize.type)}
+                  fontSize="sm"
+                  p={1}
+                  borderRadius="md"
+                  variant="solid"
+                >
+                  {prize.type === 'JPY' ? '¥' : 
+                   prize.type === 'USD' ? '$' : 
+                   prize.type}
+                </Badge>
+              </Flex>
+              
+              <FormControl mb={3}>
+                <FormLabel fontSize="sm" mb={1}>Prize Amount</FormLabel>
+                {prize.type === 'ITEM' ? (
+                  <Input
+                    value={prize.amount}
+                    onChange={(e) => handlePrizeChange(index, 'amount', e.target.value)}
+                    size="md"
+                    fontSize="16px"
+                  />
+                ) : (
+                  <NumberInput
+                    value={prize.amount}
+                    onChange={(_, value) => handlePrizeChange(index, 'amount', value)}
+                    min={0}
+                    size="md"
+                  >
+                    <NumberInputField
+                      fontSize="16px"
+                      textAlign="right"
+                      paddingRight="8px"
+                    />
+                  </NumberInput>
+                )}
+              </FormControl>
+              
+              <FormControl mb={3}>
+                <FormLabel fontSize="sm" mb={1}>Prize Type</FormLabel>
+                <Select
+                  value={prize.type}
+                  onChange={(e) => handlePrizeChange(index, 'type', e.target.value)}
+                  size="md"
+                  fontSize="16px"
+                  bg={`${getPrizeTypeBadgeColor(prize.type)}.50`}
+                  borderColor={`${getPrizeTypeBadgeColor(prize.type)}.200`}
+                >
+                  <option value="JPY">¥ (円)</option>
+                  <option value="USD">$ (ドル)</option>
+                  <option value="COIN">Coin (コイン)</option>
+                  <option value="ITEM">Item (アイテム)</option>
+                </Select>
+              </FormControl>
+              
+              <Flex justify="flex-end">
+                <IconButton
+                  aria-label="Delete"
+                  icon={<DeleteIcon />}
+                  size="sm"
+                  variant="ghost"
+                  colorScheme="red"
+                  onClick={() => handleDeletePrize(prize.position)}
+                />
+              </Flex>
+            </Box>
+          ))}
+        </Box>
+
+        {/* デスクトップビュー（ラージスクリーン） */}
+        <Box overflowX="auto" display={["none", "none", "block"]}>
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th fontSize="16px" textAlign="center" width="100px">Position</Th>
-                <Th fontSize="16px" textAlign="center" width="200px">Prize Amount</Th>
-                <Th fontSize="16px" textAlign="center" width="120px">Prize Type</Th>
-                <Th fontSize="16px" textAlign="center" width="80px">Action</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="100px">Position</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="200px">Prize Amount</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="120px">Prize Type</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="80px">Action</Th>
               </Tr>
             </Thead>
             <Tbody>
               {localPrizes.map((prize, index) => (
                 <Tr key={prize.position}>
                   <Td>
-                    {index + 1}{getOrdinalSuffix(index + 1)}
+                    <Badge colorScheme={getPrizeTypeBadgeColor(prize.type)} p={1} borderRadius="md">
+                      {index + 1}{getOrdinalSuffix(index + 1)}
+                    </Badge>
                   </Td>
                   <Td>
                     {prize.type === 'ITEM' ? (
@@ -205,11 +314,13 @@ export const PrizePoolSettings = () => {
                       size="lg"
                       fontSize="16px"
                       height="44px"
+                      bg={`${getPrizeTypeBadgeColor(prize.type)}.50`}
+                      borderColor={`${getPrizeTypeBadgeColor(prize.type)}.200`}
                     >
-                      <option value="JPY">¥</option>
-                      <option value="USD">$</option>
-                      <option value="COIN">Coin</option>
-                      <option value="ITEM">Item</option>
+                      <option value="JPY">¥ (円)</option>
+                      <option value="USD">$ (ドル)</option>
+                      <option value="COIN">Coin (コイン)</option>
+                      <option value="ITEM">Item (アイテム)</option>
                     </Select>
                   </Td>
                   <Td>
@@ -240,19 +351,19 @@ export const PrizePoolSettings = () => {
           </Text>
           <HStack spacing={4} flexWrap="wrap">
             {localPrizes.some(p => p.type === 'JPY') && (
-              <Text fontSize={["md", "lg"]} fontWeight="bold" color="blue.600">
+              <Badge fontSize={["sm", "md", "lg"]} p={2} colorScheme="green" variant="solid" borderRadius="md">
                 ¥{calculateTotal('JPY').toLocaleString()}
-              </Text>
+              </Badge>
             )}
             {localPrizes.some(p => p.type === 'USD') && (
-              <Text fontSize={["md", "lg"]} fontWeight="bold" color="blue.600">
+              <Badge fontSize={["sm", "md", "lg"]} p={2} colorScheme="blue" variant="solid" borderRadius="md">
                 ${calculateTotal('USD').toLocaleString()}
-              </Text>
+              </Badge>
             )}
             {localPrizes.some(p => p.type === 'COIN') && (
-              <Text fontSize={["md", "lg"]} fontWeight="bold" color="blue.600">
+              <Badge fontSize={["sm", "md", "lg"]} p={2} colorScheme="yellow" variant="solid" borderRadius="md">
                 {calculateTotal('COIN').toLocaleString()} COIN
-              </Text>
+              </Badge>
             )}
           </HStack>
         </Box>

@@ -58,6 +58,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragOverlay,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -225,11 +226,13 @@ const SortableItem = ({
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 999 : 'auto',
   };
 
   return (
@@ -240,14 +243,35 @@ const SortableItem = ({
       position="relative"
       minW="800px"
       px={4}
+      py={3}
+      bg="white"
+      borderWidth="1px"
+      borderRadius="md"
+      _hover={{ 
+        borderColor: "blue.200"
+      }}
+      transition="all 0.2s"
+      boxShadow={isDragging ? "lg" : "none"}
+      borderColor={isDragging ? "blue.400" : "gray.200"}
     >
       <Box
         {...attributes}
         {...listeners}
         cursor="grab"
         _active={{ cursor: "grabbing" }}
+        p={2}
+        borderRadius="md"
+        _hover={{ 
+          bg: "gray.100"
+        }}
+        display="flex"
+        alignItems="center"
       >
-        <Icon as={MdDragIndicator} boxSize={6} color="gray.500" />
+        <Icon 
+          as={MdDragIndicator} 
+          boxSize={6} 
+          color="gray.400"
+        />
       </Box>
       <Text w="50px" textAlign="center" color={isBreak ? "blue.500" : "inherit"} fontWeight={isBreak ? "bold" : "normal"}>
         {isBreak ? "Break" : level}
@@ -351,6 +375,7 @@ export const BlindSettings = memo(() => {
   const [selectedTournamentId, setSelectedTournamentId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [displayName, setDisplayName] = useState('Tournament');
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const { blindLevels, updateBlindLevels, deleteBlindLevel, addBreak } = usePokerStore();
   const savedTournaments = usePokerStore(state => state.savedTournaments);
@@ -393,27 +418,32 @@ export const BlindSettings = memo(() => {
   };
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      } as const,
+    }),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+      coordinateGetter: sortableKeyboardCoordinates as any,
     })
   );
 
+  const handleDragStart = (event: any) => {
+    document.body.style.cursor = 'grabbing';
+    setActiveId(event.active.id);
+  };
+
   const handleDragEnd = (event: any) => {
+    document.body.style.cursor = 'default';
+    setActiveId(null);
     const { active, over } = event;
-    
-    if (active.id !== over.id) {
-      const oldIndex = blindLevels.findIndex((item) => item.id.toString() === active.id);
-      const newIndex = blindLevels.findIndex((item) => item.id.toString() === over.id);
+
+    if (active.id !== over?.id) {
+      const oldIndex = blindLevels.findIndex((level) => level.id.toString() === active.id);
+      const newIndex = blindLevels.findIndex((level) => level.id.toString() === over.id);
       
-      if (oldIndex !== -1 && newIndex !== -1) {
-        const newLevels = arrayMove(blindLevels, oldIndex, newIndex);
-        const updatedLevels = newLevels.map((level, index) => ({
-          ...level,
-          id: index + 1,
-        }));
-        updateBlindLevels(updatedLevels);
-      }
+      const newBlindLevels = arrayMove(blindLevels, oldIndex, newIndex);
+      updateBlindLevels(newBlindLevels);
     }
   };
 
@@ -471,42 +501,43 @@ export const BlindSettings = memo(() => {
   }
 
   return (
-    <Box
-      bg="white"
-      p={6}
-      borderRadius="md"
-      borderColor="gray.200"
-      borderWidth="1px"
-      shadow="sm"
-      width="100%"
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
     >
-      <Tabs>
-        <TabList>
-          <Tab>Blind Settings</Tab>
-          <Tab>Saved Tournaments</Tab>
-        </TabList>
+      <Box
+        bg="white"
+        p={6}
+        borderRadius="md"
+        borderColor="gray.200"
+        borderWidth="1px"
+        shadow="sm"
+        width="100%"
+      >
+        <Tabs>
+          <TabList>
+            <Tab>Blind Settings</Tab>
+            <Tab>Saved Tournaments</Tab>
+          </TabList>
 
-        <TabPanels>
-          <TabPanel>
-            <VStack spacing={4} align="stretch" w="full">
-              <Heading size="md">Blind Settings</Heading>
+          <TabPanels>
+            <TabPanel>
+              <VStack spacing={4} align="stretch" w="full">
+                <Heading size="md">Blind Settings</Heading>
 
-              <Box 
-                borderWidth="1px"
-                borderColor="gray.200"
-                borderRadius="md"
-                p={4}
-                bg="gray.50"
-              >
-                <Box overflowX="auto">
-                  <Box minW="800px">
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={handleDragEnd}
-                    >
+                <Box 
+                  borderWidth="1px"
+                  borderColor="gray.200"
+                  borderRadius="md"
+                  p={4}
+                  bg="gray.50"
+                >
+                  <Box overflowX="auto">
+                    <Box minW="800px">
                       <SortableContext items={blindLevels} strategy={verticalListSortingStrategy}>
-                        <VStack spacing={2} align="stretch">
+                        <VStack spacing={0} align="stretch">
                           {blindLevels.map((blind, index) => {
                             let actualLevel = 1;
                             for (let i = 0; i < index; i++) {
@@ -516,151 +547,218 @@ export const BlindSettings = memo(() => {
                             }
                             
                             return (
-                              <SortableItem
-                                key={blind.id}
-                                id={blind.id.toString()}
-                                level={actualLevel}
-                                sb={blind.smallBlind}
-                                bb={blind.bigBlind}
-                                ante={blind.ante}
-                                time={blind.duration}
-                                isBreak={blind.isBreak}
-                                onSbChange={(value) => handleBlindChange(index, "smallBlind", value.toString())}
-                                onBbChange={(value) => handleBlindChange(index, "bigBlind", value.toString())}
-                                onAnteChange={(value) => handleBlindChange(index, "ante", value.toString())}
-                                onTimeChange={(value) => handleBlindChange(index, "duration", value.toString())}
-                                onDelete={() => handleDelete(index)}
-                              />
+                              <Box key={blind.id}>
+                                {index === 0 && (
+                                  <Box 
+                                    h="8px" 
+                                    bg={activeId ? "blue.50" : "transparent"} 
+                                    borderWidth={activeId ? "1px" : "0"}
+                                    borderStyle="dashed"
+                                    borderColor="blue.200"
+                                    transition="all 0.2s"
+                                    mx={2}
+                                    borderRadius="full"
+                                  />
+                                )}
+                                <SortableItem
+                                  id={blind.id.toString()}
+                                  level={actualLevel}
+                                  sb={blind.smallBlind}
+                                  bb={blind.bigBlind}
+                                  ante={blind.ante}
+                                  time={blind.duration}
+                                  isBreak={blind.isBreak}
+                                  onSbChange={(value) => handleBlindChange(index, "smallBlind", value.toString())}
+                                  onBbChange={(value) => handleBlindChange(index, "bigBlind", value.toString())}
+                                  onAnteChange={(value) => handleBlindChange(index, "ante", value.toString())}
+                                  onTimeChange={(value) => handleBlindChange(index, "duration", value.toString())}
+                                  onDelete={() => handleDelete(index)}
+                                />
+                                <Box 
+                                  h="8px" 
+                                  bg={activeId ? "blue.50" : "transparent"}
+                                  borderWidth={activeId ? "1px" : "0"}
+                                  borderStyle="dashed"
+                                  borderColor="blue.200"
+                                  transition="all 0.2s"
+                                  mx={2}
+                                  borderRadius="full"
+                                />
+                              </Box>
                             );
                           })}
                         </VStack>
                       </SortableContext>
-                    </DndContext>
+                    </Box>
                   </Box>
-                </Box>
-                
-                <Divider my={4} />
+                  
+                  <Divider my={4} />
 
-                <HStack spacing={2}>
-                  <Button
-                    leftIcon={<AddIcon />}
-                    colorScheme="blue"
-                    onClick={() => {
-                      const newLevel = {
-                        id: blindLevels.length,
-                        smallBlind: 100,
-                        bigBlind: 200,
-                        ante: 0,
-                        duration: 15,
-                        isBreak: false
-                      };
-                      updateBlindLevels([...blindLevels, newLevel]);
-                    }}
-                    size="sm"
-                  >
-                    Add Level
-                  </Button>
-                  <Button
-                    colorScheme="blue"
-                    onClick={addBreak}
-                    size="sm"
-                  >
-                    Add Break
-                  </Button>
-                </HStack>
-              </Box>
+                  <HStack spacing={2}>
+                    <Button
+                      leftIcon={<AddIcon />}
+                      colorScheme="blue"
+                      onClick={() => {
+                        const lastLevel = blindLevels[blindLevels.length - 1];
+                        let newSmallBlind = 100;
+                        let newBigBlind = 200;
+                        let newAnte = 0;
+                        let newDuration = 15;
 
-              <Box
-                borderWidth="1px"
-                borderColor="gray.200"
-                borderRadius="md"
-                p={4}
-                bg="gray.50"
-              >
-                <FormControl>
-                  <FormLabel>Tournament Name</FormLabel>
-                  <Input
-                    value={displayName}
-                    onChange={handleTournamentNameChange}
-                    placeholder="Enter tournament name"
-                    bg="white"
-                  />
-                </FormControl>
+                        // 前のレベルが存在し、ブレイクでない場合は値を2倍にする
+                        if (lastLevel && !lastLevel.isBreak) {
+                          newSmallBlind = lastLevel.smallBlind * 2;
+                          newBigBlind = lastLevel.bigBlind * 2;
+                          newAnte = lastLevel.ante > 0 ? lastLevel.ante * 2 : 0;
+                          newDuration = lastLevel.duration;
+                        }
 
-                <Button
-                  colorScheme="green"
-                  onClick={handleSaveTournament}
-                  isDisabled={!tournamentName}
-                  size="sm"
-                  width="auto"
-                  alignSelf="flex-start"
-                  mt={4}
-                >
-                  Save
-                </Button>
-              </Box>
-            </VStack>
-          </TabPanel>
-
-          <TabPanel>
-            <VStack spacing={4} align="stretch">
-              <Text fontSize="xl" fontWeight="bold">
-                Saved Tournaments
-              </Text>
-              <Table variant="unstyled">
-                <Thead>
-                  <Tr>
-                    <Th>Name</Th>
-                    <Th>Created At</Th>
-                    <Th>Actions</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {savedTournaments.map((tournament) => (
-                    <SavedTournamentRow
-                      key={tournament.id}
-                      tournament={tournament}
-                      onLoad={handleLoadTournament}
-                      onDeleteClick={(id) => {
-                        setSelectedTournamentId(id);
-                        onOpen();
+                        const newLevel = {
+                          id: blindLevels.length,
+                          smallBlind: newSmallBlind,
+                          bigBlind: newBigBlind,
+                          ante: newAnte,
+                          duration: newDuration,
+                          isBreak: false
+                        };
+                        updateBlindLevels([...blindLevels, newLevel]);
                       }}
+                      size="sm"
+                    >
+                      Add Level
+                    </Button>
+                    <Button
+                      colorScheme="blue"
+                      onClick={addBreak}
+                      size="sm"
+                    >
+                      Add Break
+                    </Button>
+                  </HStack>
+                </Box>
+
+                <Box
+                  borderWidth="1px"
+                  borderColor="gray.200"
+                  borderRadius="md"
+                  p={4}
+                  bg="gray.50"
+                >
+                  <FormControl>
+                    <FormLabel>Tournament Name</FormLabel>
+                    <Input
+                      value={displayName}
+                      onChange={handleTournamentNameChange}
+                      placeholder="Enter tournament name"
+                      bg="white"
                     />
-                  ))}
-                </Tbody>
-              </Table>
-            </VStack>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+                  </FormControl>
 
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Tournament
-            </AlertDialogHeader>
+                  <Button
+                    colorScheme="green"
+                    onClick={handleSaveTournament}
+                    isDisabled={!tournamentName}
+                    size="sm"
+                    width="auto"
+                    alignSelf="flex-start"
+                    mt={4}
+                  >
+                    Save
+                  </Button>
+                </Box>
+              </VStack>
+            </TabPanel>
 
-            <AlertDialogBody>
-              Are you sure? This action cannot be undone.
-            </AlertDialogBody>
+            <TabPanel>
+              <VStack spacing={4} align="stretch">
+                <Text fontSize="xl" fontWeight="bold">
+                  Saved Tournaments
+                </Text>
+                <Table variant="unstyled">
+                  <Thead>
+                    <Tr>
+                      <Th>Name</Th>
+                      <Th>Created At</Th>
+                      <Th>Actions</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {savedTournaments.map((tournament) => (
+                      <SavedTournamentRow
+                        key={tournament.id}
+                        tournament={tournament}
+                        onLoad={handleLoadTournament}
+                        onDeleteClick={(id) => {
+                          setSelectedTournamentId(id);
+                          onOpen();
+                        }}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </VStack>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
 
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="red" onClick={handleConfirmDelete} ml={3}>
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </Box>
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Delete Tournament
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                Are you sure? This action cannot be undone.
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button colorScheme="red" onClick={handleConfirmDelete} ml={3}>
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </Box>
+      <DragOverlay>
+        {activeId ? (
+          <Box
+            bg="white"
+            borderWidth="2px"
+            borderColor="blue.400"
+            borderRadius="md"
+            boxShadow="xl"
+            opacity={0.8}
+            transform="scale(1.02)"
+          >
+            {blindLevels.find(level => level.id.toString() === activeId) && (
+              <SortableItem
+                id={activeId}
+                level={blindLevels.find(level => level.id.toString() === activeId)?.id || 0}
+                sb={blindLevels.find(level => level.id.toString() === activeId)?.smallBlind || 0}
+                bb={blindLevels.find(level => level.id.toString() === activeId)?.bigBlind || 0}
+                ante={blindLevels.find(level => level.id.toString() === activeId)?.ante || 0}
+                time={blindLevels.find(level => level.id.toString() === activeId)?.duration || 0}
+                isBreak={blindLevels.find(level => level.id.toString() === activeId)?.isBreak}
+                onSbChange={() => {}}
+                onBbChange={() => {}}
+                onAnteChange={() => {}}
+                onTimeChange={() => {}}
+                onDelete={() => {}}
+              />
+            )}
+          </Box>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 });
 

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { SoundType } from '../utils/soundUtils';
 
 export type BlindLevel = {
   id: number;
@@ -21,6 +22,14 @@ export interface Prize {
 interface DisplaySettings {
   backgroundColor: string;
   textColor: string;
+  backgroundImage: string;
+  backgroundImageOptions: {
+    opacity: number;
+    blur: number;
+  };
+  soundEnabled: boolean;
+  warningSoundType: SoundType;
+  levelChangeSoundType: SoundType;
 }
 
 interface PlayerState {
@@ -70,8 +79,9 @@ export interface PokerState {
   updateBlindLevel: (index: number, level: BlindLevel) => void;
   blinds: BlindLevel[];
   currentBlindIndex: number;
-  decrementTimer: () => void;
+  decrementTimer: () => number;
   prizes: Prize[];
+  updateSoundSettings: (warningSoundType: SoundType, levelChangeSoundType: SoundType) => void;
 }
 
 const initialBlindLevels: BlindLevel[] = [
@@ -104,6 +114,14 @@ const initialBlindLevels: BlindLevel[] = [
 const initialDisplaySettings: DisplaySettings = {
   backgroundColor: '#1a202c',
   textColor: '#ffffff',
+  backgroundImage: '',
+  backgroundImageOptions: {
+    opacity: 0.5,
+    blur: 0
+  },
+  soundEnabled: false,
+  warningSoundType: SoundType.CASINO,
+  levelChangeSoundType: SoundType.CASINO
 };
 
 const initialPlayerState: PlayerState = {
@@ -241,7 +259,7 @@ export const usePokerStore = create<PokerState>()(
 
       updateDisplaySettings: (settings: Partial<DisplaySettings>) =>
         set((state) => ({
-          displaySettings: { ...state.displaySettings, ...settings }
+          displaySettings: { ...state.displaySettings, ...settings },
         })),
 
       updatePrizePool: (prizes: Prize[]) => set({ 
@@ -357,38 +375,72 @@ export const usePokerStore = create<PokerState>()(
       decrementTimer: () => {
         const { currentTime, currentLevel, blindLevels } = get();
         if (currentTime > 0) {
-          set({ currentTime: currentTime - 1 });
-        } else {
-          // 時間切れの場合、次のレベルへ
-          if (currentLevel < blindLevels.length - 1) {
-            const nextIndex = currentLevel + 1;
-            const nextLevel = blindLevels[nextIndex];
-            set({ 
-              currentLevel: nextIndex,
-              currentTime: nextLevel.duration * 60,
-              isBreak: nextLevel.isBreak || false,
-              isRunning: true
-            });
-          } else {
-            // トーナメント終了
-            set({ isRunning: false });
+          const newTime = currentTime - 1;
+          set({ currentTime: newTime });
+          if (newTime === 0) {
+            const nextLevelIndex = currentLevel + 1;
+            if (nextLevelIndex < blindLevels.length) {
+              setTimeout(() => {
+                set({
+                  currentLevel: nextLevelIndex,
+                  currentTime: blindLevels[nextLevelIndex].duration * 60,
+                  isBreak: blindLevels[nextLevelIndex].isBreak || false
+                });
+              }, 1000);
+            }
           }
+          return newTime;
         }
+        return currentTime;
+      },
+
+      updateSoundSettings: (warningSoundType: SoundType, levelChangeSoundType: SoundType) => {
+        set((state) => ({
+          displaySettings: {
+            ...state.displaySettings,
+            warningSoundType,
+            levelChangeSoundType
+          }
+        }));
       },
     }),
     {
-      name: 'poker-store-v8',
-      partialize: (state) => ({
-        blindLevels: state.blindLevels,
-        currentLevel: state.currentLevel,
-        savedTournaments: state.savedTournaments,
-        displaySettings: state.displaySettings,
-        tournamentName: state.tournamentName,
-        playerState: state.playerState,
-        currentTime: state.currentTime,
-        isBreak: state.isBreak,
-        prizes: state.prizes
-      }),
+      name: 'poker-store-v10',
+      partialize: (state) => {
+        const displaySettings = {
+          ...state.displaySettings,
+          backgroundColor: state.displaySettings.backgroundColor,
+          textColor: state.displaySettings.textColor,
+          backgroundImage: state.displaySettings.backgroundImage || '',
+          backgroundImageOptions: state.displaySettings.backgroundImageOptions || {
+            opacity: 0.5,
+            blur: 0
+          }
+        };
+
+        if (displaySettings.backgroundImage) {
+          const sizeKB = (displaySettings.backgroundImage.length / 1024).toFixed(2);
+          console.log("保存する背景画像サイズ:", sizeKB + " KB");
+          
+          // LocalStorageの制限（通常5MB前後）に近づいている場合、
+          // 保存が失敗する可能性があるため警告を出す
+          if (displaySettings.backgroundImage.length > 4 * 1024 * 1024) {
+            console.error("背景画像サイズが4MB以上です。LocalStorageに保存できない可能性があります。");
+          }
+        }
+
+        return {
+          blindLevels: state.blindLevels,
+          currentLevel: state.currentLevel,
+          savedTournaments: state.savedTournaments,
+          displaySettings,
+          tournamentName: state.tournamentName,
+          playerState: state.playerState,
+          currentTime: state.currentTime,
+          isBreak: state.isBreak,
+          prizes: state.prizes
+        };
+      },
     }
   )
 ); 
