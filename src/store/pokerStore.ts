@@ -147,7 +147,7 @@ const initialPrizePools = [
 export const usePokerStore = create<PokerState>()(
   persist(
     (set, get) => ({
-      currentTime: 15 * 60,
+      currentTime: 20 * 60,
       isRunning: false,
       currentLevel: 0,
       blindLevels: initialBlindLevels,
@@ -157,24 +157,27 @@ export const usePokerStore = create<PokerState>()(
       playerState: initialPlayerState,
       prizePool: initialPrizePool,
       prizePools: initialPrizePools,
-      blinds: [],
+      blinds: initialBlindLevels,
       currentBlindIndex: 0,
       prizes: [
         { id: 1, position: 1, amount: 0, type: 'USD' },
         { id: 2, position: 2, amount: 0, type: 'USD' },
         { id: 3, position: 3, amount: 0, type: 'USD' }
       ],
+      isBreak: false,
       
       startTimer: () => set({ isRunning: true }),
       
       pauseTimer: () => set({ isRunning: false }),
       
       resetTimer: () => {
+        const firstLevel = get().blindLevels[0];
         set({
           currentLevel: 0,
-          currentTime: get().blindLevels[0].duration * 60,
+          currentTime: firstLevel.duration * 60,
           isRunning: false,
-          prizes: []
+          prizes: [],
+          isBreak: firstLevel.isBreak || false
         });
       },
 
@@ -313,7 +316,7 @@ export const usePokerStore = create<PokerState>()(
       addBreak: () => {
         const { blindLevels } = get();
         const newBreak = {
-          id: blindLevels.length,  // 最後のインデックス
+          id: blindLevels.length,
           smallBlind: 0,
           bigBlind: 0,
           ante: 0,
@@ -321,7 +324,6 @@ export const usePokerStore = create<PokerState>()(
           isBreak: true
         };
 
-        // 最後にBREAKを追加
         const updatedLevels = [...blindLevels, newBreak].map((level, index) => ({
           ...level,
           id: index,
@@ -337,7 +339,6 @@ export const usePokerStore = create<PokerState>()(
         });
       },
 
-      isBreak: false,
       nextBreakTime: null,
 
       getNextBreakTime: () => {
@@ -422,8 +423,6 @@ export const usePokerStore = create<PokerState>()(
           const sizeKB = (displaySettings.backgroundImage.length / 1024).toFixed(2);
           console.log("保存する背景画像サイズ:", sizeKB + " KB");
           
-          // LocalStorageの制限（通常5MB前後）に近づいている場合、
-          // 保存が失敗する可能性があるため警告を出す
           if (displaySettings.backgroundImage.length > 4 * 1024 * 1024) {
             console.error("背景画像サイズが4MB以上です。LocalStorageに保存できない可能性があります。");
           }

@@ -127,8 +127,13 @@ export const Timer = () => {
     }
   };
 
-  const displayBlinds = isBreak ? 'BREAK TIME' : `${currentBlindLevel.smallBlind} / ${currentBlindLevel.bigBlind}`;
-  const nextBlinds = nextBlindLevel ? (nextBlindLevel.isBreak ? 'BREAK TIME' : `${nextBlindLevel.smallBlind} / ${nextBlindLevel.bigBlind}`) : 'END';
+  const displayBlinds = currentBlindLevel.isBreak === true 
+    ? 'BREAK TIME' 
+    : `${currentBlindLevel.smallBlind} / ${currentBlindLevel.bigBlind}`;
+  
+  const nextBlinds = nextBlindLevel 
+    ? (nextBlindLevel.isBreak === true ? 'BREAK TIME' : `${nextBlindLevel.smallBlind} / ${nextBlindLevel.bigBlind}`) 
+    : 'END';
   
   const nextLevelOrBreak = currentLevel < blindLevels.length - 1 ? nextBlinds : 'END OF SESSION';
 
@@ -156,7 +161,7 @@ export const Timer = () => {
           mt={[3, 3, 4]}
           color="yellow.300"
         >
-          {currentBlindLevel.isBreak ? "Break" : `Level ${currentLevel + 1}`}
+          {currentBlindLevel.isBreak === true ? "Break" : `Level ${currentLevel + 1}`}
         </Text>
         
         <Box 
@@ -198,7 +203,7 @@ export const Timer = () => {
           mb={2}
         >
           <Text fontSize={["xl", "xl", "xl", "2xl", "3xl", "4xl"]} mb={1} lineHeight="1.1" color="yellow.300" fontWeight="bold">
-            {currentBlindLevel.isBreak ? "" : "Blinds"}
+            {currentBlindLevel.isBreak === true ? "" : "Blinds"}
           </Text>
           <Text 
             fontSize={["4xl", "4xl", "5xl", "6xl", "7xl", "8xl"]} 
@@ -206,7 +211,7 @@ export const Timer = () => {
             fontWeight="bold" 
             fontFamily="system-ui, sans-serif"
             lineHeight="1.1"
-            color={currentBlindLevel.isBreak ? "red.500" : "inherit"}
+            color={currentBlindLevel.isBreak === true ? "red.500" : "inherit"}
             py={1}
           >
             {displayBlinds}
