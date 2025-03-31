@@ -240,15 +240,14 @@ const SortableItem = ({
       ref={setNodeRef} 
       style={style} 
       spacing={4} 
-      position="relative"
-      minW={["100%", "100%", "800px"]}
+      minW={["800px", "800px", "auto"]}
       px={4}
       py={3}
       bg={isBreak ? "blue.50" : "white"}
       borderWidth="1px"
       borderRadius="md"
       _hover={{ 
-        borderColor: isBreak ? "blue.300" : "blue.200"
+        borderColor: isBreak ? "blue.300" : "gray.300"
       }}
       transition="all 0.2s"
       boxShadow={isDragging ? "lg" : "none"}
@@ -266,6 +265,7 @@ const SortableItem = ({
         }}
         display="flex"
         alignItems="center"
+        width="auto"
       >
         <Icon 
           as={MdDragIndicator} 
@@ -279,16 +279,74 @@ const SortableItem = ({
         color={isBreak ? "blue.500" : "inherit"} 
         fontWeight="bold"
         fontSize={["sm", "md"]}
+        flexShrink={0}
       >
         {isBreak ? "Break" : `Level ${level}`}
       </Text>
       {isBreak ? (
         <>
-          <Flex direction="column" align="center" justify="center" w="360px">
-            <Text fontSize="sm" color="blue.500" fontWeight="bold">BREAK TIME</Text>
-          </Flex>
+          <Box visibility="hidden">
+            <Text fontSize="xs" color="gray.500" mb={1}>SB</Text>
+            <NumberInput
+              value={0}
+              min={0}
+              w="120px"
+              size="lg"
+              isReadOnly
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                fontWeight="bold"
+                borderColor="gray.200"
+                bg="white"
+              />
+            </NumberInput>
+          </Box>
+          <Box visibility="hidden">
+            <Text fontSize="xs" color="gray.500" mb={1}>BB</Text>
+            <NumberInput
+              value={0}
+              min={0}
+              w="120px"
+              size="lg"
+              isReadOnly
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                fontWeight="bold"
+                borderColor="gray.200"
+                bg="white"
+              />
+            </NumberInput>
+          </Box>
+          <Box visibility="hidden">
+            <Text fontSize="xs" color="gray.500" mb={1}>Ante</Text>
+            <NumberInput
+              value={0}
+              min={0}
+              w="120px"
+              size="lg"
+              isReadOnly
+            >
+              <NumberInputField
+                fontSize="16px"
+                textAlign="right"
+                paddingRight="8px"
+                height="44px"
+                fontWeight="bold"
+                borderColor="gray.200"
+                bg="white"
+              />
+            </NumberInput>
+          </Box>
           <Box>
-            <Text fontSize="xs" color="gray.500" mb={1}>時間 (分)</Text>
+            <Text fontSize="xs" color="gray.500" mb={1}>Time (min)</Text>
             <NumberInput
               value={time}
               onChange={(_, value) => onTimeChange(value)}
@@ -301,16 +359,11 @@ const SortableItem = ({
                 textAlign="right"
                 paddingRight="8px"
                 height="44px"
-                color="blue.700"
                 fontWeight="bold"
-                borderColor="blue.300"
-                _hover={{ borderColor: "blue.400" }}
+                borderColor="gray.200"
+                _hover={{ borderColor: "gray.300" }}
                 bg="white"
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper bg="blue.500" color="white" _hover={{ bg: "blue.600" }} />
-                <NumberDecrementStepper bg="blue.500" color="white" _hover={{ bg: "blue.600" }} />
-              </NumberInputStepper>
             </NumberInput>
           </Box>
         </>
@@ -330,16 +383,11 @@ const SortableItem = ({
                 textAlign="right"
                 paddingRight="8px"
                 height="44px"
-                color="black"
                 fontWeight="bold"
-                borderColor="green.200"
-                _hover={{ borderColor: "green.300" }}
+                borderColor="gray.200"
+                _hover={{ borderColor: "gray.300" }}
                 bg="white"
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper bg="green.500" color="white" _hover={{ bg: "green.600" }} />
-                <NumberDecrementStepper bg="green.500" color="white" _hover={{ bg: "green.600" }} />
-              </NumberInputStepper>
             </NumberInput>
           </Box>
           <Box>
@@ -356,16 +404,11 @@ const SortableItem = ({
                 textAlign="right"
                 paddingRight="8px"
                 height="44px"
-                color="black"
                 fontWeight="bold"
-                borderColor="red.200"
-                _hover={{ borderColor: "red.300" }}
+                borderColor="gray.200"
+                _hover={{ borderColor: "gray.300" }}
                 bg="white"
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper bg="red.500" color="white" _hover={{ bg: "red.600" }} />
-                <NumberDecrementStepper bg="red.500" color="white" _hover={{ bg: "red.600" }} />
-              </NumberInputStepper>
             </NumberInput>
           </Box>
           <Box>
@@ -382,20 +425,15 @@ const SortableItem = ({
                 textAlign="right"
                 paddingRight="8px"
                 height="44px"
-                color="black"
                 fontWeight="bold"
-                borderColor="purple.200"
-                _hover={{ borderColor: "purple.300" }}
+                borderColor="gray.200"
+                _hover={{ borderColor: "gray.300" }}
                 bg="white"
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper bg="purple.500" color="white" _hover={{ bg: "purple.600" }} />
-                <NumberDecrementStepper bg="purple.500" color="white" _hover={{ bg: "purple.600" }} />
-              </NumberInputStepper>
             </NumberInput>
           </Box>
           <Box>
-            <Text fontSize="xs" color="gray.500" mb={1}>時間 (分)</Text>
+            <Text fontSize="xs" color="gray.500" mb={1}>Time (min)</Text>
             <NumberInput
               value={time}
               onChange={(_, value) => onTimeChange(value)}
@@ -408,16 +446,11 @@ const SortableItem = ({
                 textAlign="right"
                 paddingRight="8px"
                 height="44px"
-                color="black"
                 fontWeight="bold"
-                borderColor="orange.200"
-                _hover={{ borderColor: "orange.300" }}
+                borderColor="gray.200"
+                _hover={{ borderColor: "gray.300" }}
                 bg="white"
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper bg="orange.500" color="white" _hover={{ bg: "orange.600" }} />
-                <NumberDecrementStepper bg="orange.500" color="white" _hover={{ bg: "orange.600" }} />
-              </NumberInputStepper>
             </NumberInput>
           </Box>
         </>
@@ -442,6 +475,8 @@ export const BlindSettings = memo(() => {
   const [mounted, setMounted] = useState(false);
   const [displayName, setDisplayName] = useState('Tournament');
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+  const resetConfirmRef = React.useRef<HTMLButtonElement>(null);
 
   const { blindLevels, updateBlindLevels, deleteBlindLevel, addBreak } = usePokerStore();
   const savedTournaments = usePokerStore(state => state.savedTournaments);
@@ -450,6 +485,38 @@ export const BlindSettings = memo(() => {
   const deleteTournament = usePokerStore(state => state.deleteTournament);
   const tournamentName = usePokerStore(state => state.tournamentName);
   const setTournamentName = usePokerStore(state => state.setTournamentName);
+
+  // Function to generate clean blind values based on common poker tournament structures
+  const getNextBlindValue = (currentValue: number): number => {
+    // Common blind values used in poker tournaments
+    const commonValues = [
+      5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 200, 300, 
+      400, 500, 600, 800, 1000, 1200, 1500, 2000, 3000, 4000, 5000, 
+      6000, 8000, 10000, 12000, 15000, 20000, 30000, 40000, 50000
+    ];
+    
+    // Find the next appropriate blind value
+    for (let i = 0; i < commonValues.length; i++) {
+      if (commonValues[i] > currentValue) {
+        return commonValues[i];
+      }
+    }
+    
+    // If the current value is already very high, increase by approximately 25-50%
+    // and round to a clean number
+    const nextApproxValue = currentValue * 1.5;
+    
+    // Round to the nearest clean number based on magnitude
+    if (nextApproxValue < 100) {
+      return Math.ceil(nextApproxValue / 5) * 5; // Round to nearest 5
+    } else if (nextApproxValue < 1000) {
+      return Math.ceil(nextApproxValue / 50) * 50; // Round to nearest 50
+    } else if (nextApproxValue < 10000) {
+      return Math.ceil(nextApproxValue / 500) * 500; // Round to nearest 500
+    } else {
+      return Math.ceil(nextApproxValue / 5000) * 5000; // Round to nearest 5000
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -482,6 +549,29 @@ export const BlindSettings = memo(() => {
     });
     updateBlindLevels(newLevels);
   };
+
+  const handleResetBlinds = useCallback(() => {
+    // Default initial blind level
+    const initialLevel = {
+      id: 0,
+      smallBlind: 0,
+      bigBlind: 0,
+      ante: 0,
+      duration: 15,
+      isBreak: false
+    };
+    
+    updateBlindLevels([initialLevel]);
+    setIsResetConfirmOpen(false);
+    
+    toast({
+      title: 'Reset Complete',
+      description: 'Blind levels have been reset',
+      status: 'info',
+      duration: 3000,
+      isClosable: true,
+    });
+  }, [updateBlindLevels, toast]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -516,8 +606,8 @@ export const BlindSettings = memo(() => {
   const handleSaveTournament = useCallback(() => {
     if (!newTournamentName.trim()) {
       toast({
-        title: 'エラー',
-        description: 'トーナメント名を入力してください',
+        title: 'Error',
+        description: 'Please enter tournament name',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -527,8 +617,8 @@ export const BlindSettings = memo(() => {
     saveTournament(newTournamentName.trim());
     setNewTournamentName('');
     toast({
-      title: '保存完了',
-      description: 'トーナメント設定を保存しました',
+      title: 'Saved',
+      description: 'Tournament settings saved',
       status: 'success',
       duration: 3000,
       isClosable: true,
@@ -539,8 +629,8 @@ export const BlindSettings = memo(() => {
     loadTournament(id);
     onClose();
     toast({
-      title: '読み込み完了',
-      description: 'トーナメント設定を読み込みました',
+      title: 'Loaded',
+      description: 'Tournament settings loaded',
       status: 'success',
       duration: 3000,
       isClosable: true,
@@ -553,8 +643,8 @@ export const BlindSettings = memo(() => {
       setSelectedTournamentId(null);
       onClose();
       toast({
-        title: '削除完了',
-        description: 'トーナメント設定を削除しました',
+        title: 'Deleted',
+        description: 'Tournament settings deleted',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -581,9 +671,8 @@ export const BlindSettings = memo(() => {
         borderWidth="1px"
         shadow="sm"
         width="100%"
-        overflowX="auto"
       >
-        <Tabs>
+        <Tabs width="100%">
           <TabList>
             <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>Blind Settings</Tab>
             <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>Saved Tournaments</Tab>
@@ -593,20 +682,25 @@ export const BlindSettings = memo(() => {
             <TabPanel>
               <VStack spacing={4} align="stretch" w="full">
                 <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-                  <Heading size="md">ブラインド設定</Heading>
+                  <Heading size="md">Blind Settings</Heading>
                   <Text fontSize="sm" color="gray.600" mt={[2, 0]}>
-                    ※ドラッグ＆ドロップで順序を変更できます
+                    *You can drag & drop to change order
                   </Text>
                 </Box>
                 
-                <Box overflowX="auto">
-                  <Box 
-                    borderWidth="1px"
-                    borderColor="gray.200"
-                    borderRadius="md"
-                    p={4}
-                    bg="gray.50"
-                    minW={["100%", "100%", "800px"]}
+                <Box 
+                  bgColor="gray.50"
+                  borderWidth="1px"
+                  borderColor="gray.200"
+                  borderRadius="md"
+                  p={4}
+                >
+                  <Box
+                    overflowX="auto"
+                    css={{
+                      "&::-webkit-scrollbar": { height: "8px" },
+                      "&::-webkit-scrollbar-thumb": { backgroundColor: "rgba(0,0,0,0.1)", borderRadius: "4px" }
+                    }}
                   >
                     <Grid 
                       templateColumns={["1fr", "1fr", "50px 1fr 1fr 1fr 1fr 50px"]} 
@@ -614,6 +708,7 @@ export const BlindSettings = memo(() => {
                       pb={2} 
                       px={4} 
                       display={["none", "none", "grid"]}
+                      width="100%"
                     >
                       <Text fontWeight="bold" fontSize="sm" color="gray.500"></Text>
                       <Text fontWeight="bold" fontSize="sm" color="gray.500" textAlign="center">Small Blind</Text>
@@ -623,7 +718,7 @@ export const BlindSettings = memo(() => {
                       <Text fontWeight="bold" fontSize="sm" color="gray.500"></Text>
                     </Grid>
                     
-                    <Box minW={["100%", "100%", "800px"]}>
+                    <Box minW={["800px", "800px", "auto"]}>
                       <SortableContext items={blindLevels} strategy={verticalListSortingStrategy}>
                         <VStack spacing={2} align="stretch">
                           {blindLevels.map((blind, index) => {
@@ -687,17 +782,52 @@ export const BlindSettings = memo(() => {
                         colorScheme="blue"
                         onClick={() => {
                           const lastLevel = blindLevels[blindLevels.length - 1];
-                          let newSmallBlind = 100;
-                          let newBigBlind = 200;
+                          let newSmallBlind = 25;
+                          let newBigBlind = 50;
                           let newAnte = 0;
                           let newDuration = 15;
 
-                          // 前のレベルが存在し、ブレイクでない場合は値を2倍にする
+                          // Calculate next blind levels based on common poker tournament structures
                           if (lastLevel && !lastLevel.isBreak) {
-                            newSmallBlind = lastLevel.smallBlind * 2;
-                            newBigBlind = lastLevel.bigBlind * 2;
-                            newAnte = lastLevel.ante > 0 ? lastLevel.ante * 2 : 0;
+                            newSmallBlind = getNextBlindValue(lastLevel.smallBlind);
+                            newBigBlind = newSmallBlind * 2; // Maintain SB:BB ratio of 1:2
+                            
+                            // Calculate ante if applicable (usually 10-25% of BB)
+                            if (lastLevel.ante > 0) {
+                              // Approximately 10-20% of BB, rounded to a clean number
+                              const antePercent = lastLevel.ante / lastLevel.bigBlind;
+                              newAnte = Math.round((newBigBlind * antePercent) / 5) * 5;
+                              
+                              // Ensure ante is at least 5 if previously existed
+                              newAnte = Math.max(5, newAnte);
+                            }
+                            
                             newDuration = lastLevel.duration;
+                          } else if (lastLevel && lastLevel.isBreak) {
+                            // If the last level is a break, find the last non-break level and use that as reference
+                            let lastNonBreakIndex = blindLevels.length - 2; // Start from the level before the break
+                            
+                            // Find the last non-break level
+                            while (lastNonBreakIndex >= 0 && blindLevels[lastNonBreakIndex].isBreak) {
+                              lastNonBreakIndex--;
+                            }
+                            
+                            if (lastNonBreakIndex >= 0) {
+                              const referenceLevel = blindLevels[lastNonBreakIndex];
+                              
+                              // Use the reference level to calculate the next blind values
+                              newSmallBlind = getNextBlindValue(referenceLevel.smallBlind);
+                              newBigBlind = newSmallBlind * 2;
+                              
+                              // Calculate ante if applicable
+                              if (referenceLevel.ante > 0) {
+                                const antePercent = referenceLevel.ante / referenceLevel.bigBlind;
+                                newAnte = Math.round((newBigBlind * antePercent) / 5) * 5;
+                                newAnte = Math.max(5, newAnte);
+                              }
+                              
+                              newDuration = referenceLevel.duration;
+                            }
                           }
 
                           const newLevel = {
@@ -710,8 +840,8 @@ export const BlindSettings = memo(() => {
                           };
                           updateBlindLevels([...blindLevels, newLevel]);
                           toast({
-                            title: 'レベル追加',
-                            description: '新しいブラインドレベルを追加しました',
+                            title: 'Level Added',
+                            description: 'New blind level added',
                             status: 'success',
                             duration: 2000,
                             isClosable: true,
@@ -720,7 +850,7 @@ export const BlindSettings = memo(() => {
                         size="md"
                         mb={[2, 0]}
                       >
-                        ブラインドレベル追加
+                        Add Blind Level
                       </Button>
                       <Button
                         colorScheme="teal"
@@ -728,7 +858,15 @@ export const BlindSettings = memo(() => {
                         size="md"
                         mb={[2, 0]}
                       >
-                        休憩追加
+                        Add Break
+                      </Button>
+                      <Button
+                        colorScheme="red"
+                        onClick={() => setIsResetConfirmOpen(true)}
+                        size="md"
+                        mb={[2, 0]}
+                      >
+                        Reset
                       </Button>
                     </HStack>
                   </Box>
@@ -740,16 +878,17 @@ export const BlindSettings = memo(() => {
                   borderRadius="md"
                   p={4}
                   bg="gray.50"
+                  width="100%"
                 >
                   <FormControl>
-                    <FormLabel fontWeight="bold">トーナメント名</FormLabel>
+                    <FormLabel fontWeight="bold">Tournament Name</FormLabel>
                     <Input
                       value={displayName}
                       onChange={handleTournamentNameChange}
-                      placeholder="トーナメント名を入力"
+                      placeholder="Enter tournament name"
                       bg="white"
-                      borderColor="blue.200"
-                      _hover={{ borderColor: "blue.300" }}
+                      borderColor="gray.200"
+                      _hover={{ borderColor: "gray.300" }}
                       fontWeight="medium"
                     />
                   </FormControl>
@@ -764,7 +903,7 @@ export const BlindSettings = memo(() => {
                     mt={4}
                     leftIcon={<CheckIcon />}
                   >
-                    保存
+                    Save
                   </Button>
                 </Box>
               </VStack>
@@ -773,39 +912,53 @@ export const BlindSettings = memo(() => {
             <TabPanel>
               <VStack spacing={4} align="stretch">
                 <Text fontSize="xl" fontWeight="bold">
-                  保存済みトーナメント
+                  Saved Tournaments
                 </Text>
-                <Box overflowX="auto">
-                  <Table variant="simple" colorScheme="blue">
-                    <Thead bg="blue.50">
-                      <Tr>
-                        <Th>名称</Th>
-                        <Th>作成日時</Th>
-                        <Th>操作</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {savedTournaments.length === 0 ? (
+                <Box
+                  bgColor="white"
+                  borderWidth="1px"
+                  borderColor="gray.200"
+                  borderRadius="md"
+                  p={4}
+                >
+                  <Box
+                    overflowX="auto"
+                    css={{
+                      "&::-webkit-scrollbar": { height: "8px" },
+                      "&::-webkit-scrollbar-thumb": { backgroundColor: "rgba(0,0,0,0.1)", borderRadius: "4px" }
+                    }}
+                  >
+                    <Table variant="simple" colorScheme="blue" minW={["800px", "800px", "auto"]}>
+                      <Thead bg="blue.50">
                         <Tr>
-                          <Td colSpan={3} textAlign="center" py={8}>
-                            <Text color="gray.500">保存されたトーナメントはありません</Text>
-                          </Td>
+                          <Th>Name</Th>
+                          <Th>Created At</Th>
+                          <Th>Actions</Th>
                         </Tr>
-                      ) : (
-                        savedTournaments.map((tournament) => (
-                          <SavedTournamentRow
-                            key={tournament.id}
-                            tournament={tournament}
-                            onLoad={handleLoadTournament}
-                            onDeleteClick={(id) => {
-                              setSelectedTournamentId(id);
-                              onOpen();
-                            }}
-                          />
-                        ))
-                      )}
-                    </Tbody>
-                  </Table>
+                      </Thead>
+                      <Tbody>
+                        {savedTournaments.length === 0 ? (
+                          <Tr>
+                            <Td colSpan={3} textAlign="center" py={8}>
+                              <Text color="gray.500">No saved tournaments</Text>
+                            </Td>
+                          </Tr>
+                        ) : (
+                          savedTournaments.map((tournament) => (
+                            <SavedTournamentRow
+                              key={tournament.id}
+                              tournament={tournament}
+                              onLoad={handleLoadTournament}
+                              onDeleteClick={(id) => {
+                                setSelectedTournamentId(id);
+                                onOpen();
+                              }}
+                            />
+                          ))
+                        )}
+                      </Tbody>
+                    </Table>
+                  </Box>
                 </Box>
               </VStack>
             </TabPanel>
@@ -820,19 +973,46 @@ export const BlindSettings = memo(() => {
           <AlertDialogOverlay>
             <AlertDialogContent>
               <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                トーナメント削除
+                Delete Tournament
               </AlertDialogHeader>
 
               <AlertDialogBody>
-                本当に削除しますか？この操作は元に戻せません。
+                Are you sure? This action cannot be undone.
               </AlertDialogBody>
 
               <AlertDialogFooter>
                 <Button ref={cancelRef} onClick={onClose}>
-                  キャンセル
+                  Cancel
                 </Button>
                 <Button colorScheme="red" onClick={handleConfirmDelete} ml={3}>
-                  削除
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+        
+        <AlertDialog
+          isOpen={isResetConfirmOpen}
+          leastDestructiveRef={resetConfirmRef}
+          onClose={() => setIsResetConfirmOpen(false)}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Reset Blind Levels
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                This will reset all blind levels. Are you sure you want to continue?
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={resetConfirmRef} onClick={() => setIsResetConfirmOpen(false)}>
+                  Cancel
+                </Button>
+                <Button colorScheme="red" onClick={handleResetBlinds} ml={3}>
+                  Reset
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>

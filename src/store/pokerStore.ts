@@ -82,6 +82,8 @@ export interface PokerState {
   decrementTimer: () => number;
   prizes: Prize[];
   updateSoundSettings: (warningSoundType: SoundType, levelChangeSoundType: SoundType) => void;
+  resetPlayerState: () => void;
+  resetPrizePool: () => void;
 }
 
 const initialBlindLevels: BlindLevel[] = [
@@ -403,6 +405,17 @@ export const usePokerStore = create<PokerState>()(
             levelChangeSoundType
           }
         }));
+      },
+
+      resetPlayerState: () => {
+        set({ playerState: initialPlayerState });
+      },
+
+      resetPrizePool: () => {
+        set({ 
+          prizePool: initialPrizePool,
+          prizes: initialPrizePool
+        });
       },
     }),
     {

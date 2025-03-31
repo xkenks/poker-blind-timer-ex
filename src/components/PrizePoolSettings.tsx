@@ -27,7 +27,7 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import { AddIcon, DeleteIcon, RepeatIcon } from '@chakra-ui/icons';
 import { usePokerStore, Prize } from '../store/pokerStore';
 
 const PRIZE_TYPES = {
@@ -53,7 +53,7 @@ const prizeTypeOptions = [
 ];
 
 export const PrizePoolSettings = () => {
-  const { prizes, updatePrizePool } = usePokerStore();
+  const { prizes, updatePrizePool, resetPrizePool } = usePokerStore();
   const [localPrizes, setLocalPrizes] = useState<Prize[]>(prizes);
 
   // コンポーネントマウント時の初期化
@@ -162,15 +162,26 @@ export const PrizePoolSettings = () => {
           gap={2}
         >
           <Text fontSize={["lg", "xl"]} fontWeight="bold">Prize Pool Settings</Text>
-          <Button
-            leftIcon={<AddIcon />}
-            colorScheme="blue"
-            variant="ghost"
-            size={["sm", "md"]}
-            onClick={handleAddPrize}
-          >
-            Add Prize
-          </Button>
+          <HStack spacing={2}>
+            <Button
+              leftIcon={<RepeatIcon />}
+              colorScheme="blue"
+              variant="outline"
+              size={["sm", "md"]}
+              onClick={resetPrizePool}
+            >
+              Reset
+            </Button>
+            <Button
+              leftIcon={<AddIcon />}
+              colorScheme="blue"
+              variant="ghost"
+              size={["sm", "md"]}
+              onClick={handleAddPrize}
+            >
+              Add Prize
+            </Button>
+          </HStack>
         </Flex>
 
         {/* モバイルビュー（スモールスクリーン） */}

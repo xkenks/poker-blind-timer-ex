@@ -28,14 +28,17 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  Divider
+  Divider,
+  Button
 } from '@chakra-ui/react';
+import { RepeatIcon } from '@chakra-ui/icons';
 import { usePokerStore } from '../store/pokerStore';
 
 export const PlayerManager = () => {
   const {
     playerState,
     updatePlayerState,
+    resetPlayerState
   } = usePokerStore();
 
   const {
@@ -63,9 +66,20 @@ export const PlayerManager = () => {
       maxWidth={["100%", "100%", "100%", "900px"]}
       mx="auto"
     >
-      <Text fontSize={["xl", "xl"]} fontWeight="bold" mb={[4, 4]}>
-        Player Management
-      </Text>
+      <Flex justifyContent="space-between" alignItems="center" mb={[4, 4]}>
+        <Text fontSize={["xl", "xl"]} fontWeight="bold">
+          Player Management
+        </Text>
+        <Button
+          leftIcon={<RepeatIcon />}
+          colorScheme="blue"
+          variant="outline"
+          size="sm"
+          onClick={resetPlayerState}
+        >
+          Reset
+        </Button>
+      </Flex>
 
       {/* モバイルビュー（スモールスクリーン） */}
       <Box display={["block", "block", "none"]}>
