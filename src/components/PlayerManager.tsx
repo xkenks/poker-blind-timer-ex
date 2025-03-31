@@ -106,9 +106,12 @@ export const PlayerManager = () => {
                   borderColor="blue.200"
                   _hover={{ borderColor: "blue.300" }}
                   textAlign="right"
-                  paddingRight="36px"
+                  paddingRight="40px"
                   fontSize="18px"
                   height="48px"
+                  color="black"
+                  fontWeight="bold"
+                  inputMode="numeric"
                 />
                 <NumberInputStepper>
                   <NumberIncrementStepper bg="blue.500" color="white" _hover={{ bg: 'blue.600' }} />
@@ -142,9 +145,12 @@ export const PlayerManager = () => {
                   borderColor="green.200"
                   _hover={{ borderColor: "green.300" }}
                   textAlign="right"
-                  paddingRight="36px"
+                  paddingRight="40px"
                   fontSize="18px"
                   height="48px"
+                  color="black"
+                  fontWeight="bold"
+                  inputMode="numeric"
                 />
                 <NumberInputStepper>
                   <NumberIncrementStepper bg="green.500" color="white" _hover={{ bg: 'green.600' }} />
@@ -179,9 +185,12 @@ export const PlayerManager = () => {
                   borderColor="red.200"
                   _hover={{ borderColor: "red.300" }}
                   textAlign="right"
-                  paddingRight="36px"
+                  paddingRight="40px"
                   fontSize="18px"
                   height="48px"
+                  color="black"
+                  fontWeight="bold"
+                  inputMode="numeric"
                 />
                 <NumberInputStepper>
                   <NumberIncrementStepper bg="red.500" color="white" _hover={{ bg: 'red.600' }} />
@@ -216,9 +225,12 @@ export const PlayerManager = () => {
                   borderColor="purple.200"
                   _hover={{ borderColor: "purple.300" }}
                   textAlign="right"
-                  paddingRight="36px"
+                  paddingRight="40px"
                   fontSize="18px"
                   height="48px"
+                  color="black"
+                  fontWeight="bold"
+                  inputMode="numeric"
                 />
                 <NumberInputStepper>
                   <NumberIncrementStepper bg="purple.500" color="white" _hover={{ bg: 'purple.600' }} />
@@ -260,9 +272,12 @@ export const PlayerManager = () => {
                     borderColor="blue.200"
                     _hover={{ borderColor: "blue.300" }}
                     textAlign="right"
-                    paddingRight="30px"
+                    paddingRight="35px"
                     fontSize="16px"
                     height="40px"
+                    color="black"
+                    fontWeight="bold"
+                    inputMode="numeric"
                   />
                   <NumberInputStepper>
                     <NumberIncrementStepper bg="blue.500" color="white" _hover={{ bg: 'blue.600' }} />
@@ -291,9 +306,12 @@ export const PlayerManager = () => {
                     borderColor="green.200"
                     _hover={{ borderColor: "green.300" }}
                     textAlign="right"
-                    paddingRight="30px"
+                    paddingRight="35px"
                     fontSize="16px"
                     height="40px"
+                    color="black"
+                    fontWeight="bold"
+                    inputMode="numeric"
                   />
                   <NumberInputStepper>
                     <NumberIncrementStepper bg="green.500" color="white" _hover={{ bg: 'green.600' }} />
@@ -323,9 +341,12 @@ export const PlayerManager = () => {
                     borderColor="red.200"
                     _hover={{ borderColor: "red.300" }}
                     textAlign="right"
-                    paddingRight="30px"
+                    paddingRight="35px"
                     fontSize="16px"
                     height="40px"
+                    color="black"
+                    fontWeight="bold"
+                    inputMode="numeric"
                   />
                   <NumberInputStepper>
                     <NumberIncrementStepper bg="red.500" color="white" _hover={{ bg: 'red.600' }} />
@@ -355,9 +376,12 @@ export const PlayerManager = () => {
                     borderColor="purple.200"
                     _hover={{ borderColor: "purple.300" }}
                     textAlign="right"
-                    paddingRight="30px"
+                    paddingRight="35px"
                     fontSize="16px"
                     height="40px"
+                    color="black"
+                    fontWeight="bold"
+                    inputMode="numeric"
                   />
                   <NumberInputStepper>
                     <NumberIncrementStepper bg="purple.500" color="white" _hover={{ bg: 'purple.600' }} />
