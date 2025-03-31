@@ -130,7 +130,7 @@ export default function Home() {
         
         <Container maxW="container.xl" position="relative" px={[4, 6, 8]}>
           {/* サービス名を中央に表示 */}
-          <Box textAlign="center" mb={[2, 3, 4]} mt={[-6, -8, -12]}>
+          <Box textAlign="center" mb={[6, 8, 10]} mt={[-6, -8, -12]}>
             <Box 
               as="h1" 
               fontSize={["2xl", "3xl", "4xl", "5xl"]}
@@ -142,12 +142,14 @@ export default function Home() {
               fontFamily="'Montserrat', sans-serif"
               px={[2, 3, 4]}
               py={[1, 1.5, 2]}
+              pb={[3, 4, 5]}
               borderBottom="2px solid"
               borderColor="yellow.400"
               position="relative"
               width={["auto", "auto", "auto"]}
               maxWidth="100%"
               overflowWrap="break-word"
+              mb={[4, 6, 8]}
             >
               Poker Blind Timer EX
             </Box>

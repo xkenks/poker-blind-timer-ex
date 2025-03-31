@@ -15,9 +15,20 @@ export const metadata: Metadata = {
     siteName: 'Poker Blind Timer EX',
     locale: 'ja_JP',
     type: 'website',
+    images: [
+      {
+        url: '/images/screenshot.png',
+        width: 1200,
+        height: 630,
+        alt: 'Poker Blind Timer EX - 本格的トーナメント用タイマー',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'Poker Blind Timer EX | 本格的トーナメント用タイマー',
+    description: 'ポーカートーナメント運営に最適な高機能タイマー。ブラインド管理、プレイヤー管理も可能。',
+    images: ['/images/screenshot.png'],
   },
   other: {
     'google-adsense-account': 'ca-pub-4037508705654510',
