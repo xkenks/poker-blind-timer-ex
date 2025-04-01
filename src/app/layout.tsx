@@ -71,6 +71,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <meta name="theme-color" content="#3182CE" />
         <meta name="application-name" content="Poker Blind Timer EX" />
         
+        {/* Favicon - 明示的に追加（Googleなどの検索エンジン対応） */}
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon.ico" sizes="16x16" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        
         {/* Twitter Card 明示的なタグ */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Poker Blind Timer EX | 本格的トーナメント用タイマー" />
