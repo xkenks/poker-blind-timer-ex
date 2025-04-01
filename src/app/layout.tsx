@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/screenshot.png',
+        url: 'https://poker-blind-timer-ex.com/images/screenshot.png',
         width: 1200,
         height: 630,
         alt: 'Poker Blind Timer EX - 本格的トーナメント用タイマー',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Poker Blind Timer EX | 本格的トーナメント用タイマー',
     description: 'ポーカートーナメント運営に最適な高機能タイマー。ブラインド管理、プレイヤー管理も可能。',
-    images: ['/images/screenshot.png'],
+    images: ['https://poker-blind-timer-ex.com/images/screenshot.png'],
   },
   other: {
     'google-adsense-account': 'ca-pub-4037508705654510',
@@ -70,6 +70,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <meta name="apple-mobile-web-app-title" content="PokerTimer" />
         <meta name="theme-color" content="#3182CE" />
         <meta name="application-name" content="Poker Blind Timer EX" />
+        
+        {/* Twitter Card 明示的なタグ */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Poker Blind Timer EX | 本格的トーナメント用タイマー" />
+        <meta name="twitter:description" content="ポーカートーナメント運営に最適な高機能タイマー。ブラインド管理、プレイヤー管理も可能。" />
+        <meta name="twitter:image" content="https://poker-blind-timer-ex.com/images/screenshot.png" />
         
         {/* iPhoneX, iPhone XS */}
         <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/images/apple-splash-1125x2436.jpg" />
