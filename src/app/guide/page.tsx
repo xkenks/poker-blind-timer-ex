@@ -103,7 +103,7 @@ const GuidePage = () => {
               {/* イントロセクション */}
               <Box id="intro" bg="white" p={6} borderRadius="md" boxShadow="sm">
                 <Heading as="h2" size="xl" mb={4} color="blue.700">
-                  
+                  ポーカーブラインドタイマーの使い方
                 </Heading>
                 <Text fontSize="lg" mb={4}>
                   当タイマーは、ポーカートーナメント運営に必要なすべての機能を備えた高機能タイマーです。
