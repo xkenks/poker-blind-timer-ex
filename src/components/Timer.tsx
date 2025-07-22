@@ -34,6 +34,17 @@ export const Timer = () => {
   const currentBlindLevel = blindLevels[currentLevel] || { smallBlind: 0, bigBlind: 0, ante: 0 };
   const nextBlindLevel = blindLevels[currentLevel + 1];
 
+  // 実際のブラインドレベル番号を計算（breakを除く）
+  const getActualLevelNumber = (index: number) => {
+    let actualLevel = 1;
+    for (let i = 0; i < index; i++) {
+      if (!blindLevels[i].isBreak) {
+        actualLevel++;
+      }
+    }
+    return actualLevel;
+  };
+
   const [audioInitialized, setAudioInitialized] = useState(false);
   const hadUserInteraction = useRef(false);
 
@@ -161,7 +172,7 @@ export const Timer = () => {
           mt={[3, 3, 4]}
           color="yellow.300"
         >
-          {currentBlindLevel.isBreak === true ? "Break" : `Level ${currentLevel + 1}`}
+          {currentBlindLevel.isBreak === true ? "Break" : `Level ${getActualLevelNumber(currentLevel)}`}
         </Text>
         
         <Box 
