@@ -47,6 +47,13 @@ export interface Tournament {
   blindLevels: BlindLevel[];
 }
 
+export interface TournamentTemplate {
+  id: string;
+  name: string;
+  description: string;
+  blindLevels: BlindLevel[];
+}
+
 export interface PokerState {
   currentTime: number;
   isRunning: boolean;
@@ -72,6 +79,8 @@ export interface PokerState {
   updatePrizePool: (prizes: Prize[]) => void;
   deleteBlindLevel: (id: number) => void;
   updateBlindLevels: (levels: BlindLevel[]) => void;
+  updateAllBlindTimes: (time: number) => void;
+  applyTournamentTemplate: (template: TournamentTemplate) => void;
   addBreak: () => void;
   isBreak: boolean;
   nextBreakTime: number | null;
@@ -111,6 +120,162 @@ const initialBlindLevels: BlindLevel[] = [
   { id: 21, smallBlind: 15000, bigBlind: 30000, ante: 30000, duration: 20, isBreak: false },
   { id: 22, smallBlind: 20000, bigBlind: 40000, ante: 40000, duration: 20, isBreak: false },
   { id: 23, smallBlind: 25000, bigBlind: 50000, ante: 50000, duration: 20, isBreak: false }
+];
+
+// トーナメントテンプレート
+const tournamentTemplates: TournamentTemplate[] = [
+  {
+    id: 'turbo-100',
+    name: 'ターボ100',
+    description: '100/200から始まるターボトーナメント（120分想定）',
+    blindLevels: [
+      { id: 0, smallBlind: 100, bigBlind: 200, ante: 0, duration: 3, isBreak: false },
+      { id: 1, smallBlind: 200, bigBlind: 400, ante: 0, duration: 3, isBreak: false },
+      { id: 2, smallBlind: 300, bigBlind: 600, ante: 0, duration: 3, isBreak: false },
+      { id: 3, smallBlind: 500, bigBlind: 1000, ante: 0, duration: 3, isBreak: false },
+      { id: 4, smallBlind: 800, bigBlind: 1600, ante: 0, duration: 3, isBreak: false },
+      { id: 5, smallBlind: 1200, bigBlind: 2400, ante: 0, duration: 3, isBreak: false },
+      { id: 6, smallBlind: 2000, bigBlind: 4000, ante: 0, duration: 3, isBreak: false },
+      { id: 7, smallBlind: 3000, bigBlind: 6000, ante: 0, duration: 3, isBreak: false },
+      { id: 8, smallBlind: 5000, bigBlind: 10000, ante: 0, duration: 3, isBreak: false },
+      { id: 9, smallBlind: 8000, bigBlind: 16000, ante: 0, duration: 3, isBreak: false },
+      { id: 10, smallBlind: 12000, bigBlind: 24000, ante: 0, duration: 3, isBreak: false },
+      { id: 11, smallBlind: 20000, bigBlind: 40000, ante: 0, duration: 3, isBreak: false },
+      { id: 12, smallBlind: 30000, bigBlind: 60000, ante: 0, duration: 3, isBreak: false },
+      { id: 13, smallBlind: 50000, bigBlind: 100000, ante: 0, duration: 3, isBreak: false },
+      { id: 14, smallBlind: 80000, bigBlind: 160000, ante: 0, duration: 3, isBreak: false },
+      { id: 15, smallBlind: 120000, bigBlind: 240000, ante: 0, duration: 3, isBreak: false },
+      { id: 16, smallBlind: 200000, bigBlind: 400000, ante: 0, duration: 3, isBreak: false },
+      { id: 17, smallBlind: 300000, bigBlind: 600000, ante: 0, duration: 3, isBreak: false },
+      { id: 18, smallBlind: 500000, bigBlind: 1000000, ante: 0, duration: 3, isBreak: false },
+      { id: 19, smallBlind: 800000, bigBlind: 1600000, ante: 0, duration: 3, isBreak: false },
+      { id: 20, smallBlind: 1200000, bigBlind: 2400000, ante: 0, duration: 3, isBreak: false },
+      { id: 21, smallBlind: 2000000, bigBlind: 4000000, ante: 0, duration: 3, isBreak: false },
+      { id: 22, smallBlind: 3000000, bigBlind: 6000000, ante: 0, duration: 3, isBreak: false },
+      { id: 23, smallBlind: 5000000, bigBlind: 10000000, ante: 0, duration: 3, isBreak: false },
+      { id: 24, smallBlind: 8000000, bigBlind: 16000000, ante: 0, duration: 3, isBreak: false },
+      { id: 25, smallBlind: 12000000, bigBlind: 24000000, ante: 0, duration: 3, isBreak: false },
+      { id: 26, smallBlind: 20000000, bigBlind: 40000000, ante: 0, duration: 3, isBreak: false },
+      { id: 27, smallBlind: 30000000, bigBlind: 60000000, ante: 0, duration: 3, isBreak: false },
+      { id: 28, smallBlind: 50000000, bigBlind: 100000000, ante: 0, duration: 3, isBreak: false },
+      { id: 29, smallBlind: 80000000, bigBlind: 160000000, ante: 0, duration: 3, isBreak: false },
+      { id: 30, smallBlind: 120000000, bigBlind: 240000000, ante: 0, duration: 3, isBreak: false }
+    ]
+  },
+  {
+    id: 'turbo-10',
+    name: 'ターボ10',
+    description: '10/20から始まるターボトーナメント（120分想定）',
+    blindLevels: [
+      { id: 0, smallBlind: 10, bigBlind: 20, ante: 0, duration: 3, isBreak: false },
+      { id: 1, smallBlind: 20, bigBlind: 40, ante: 0, duration: 3, isBreak: false },
+      { id: 2, smallBlind: 30, bigBlind: 60, ante: 0, duration: 3, isBreak: false },
+      { id: 3, smallBlind: 50, bigBlind: 100, ante: 0, duration: 3, isBreak: false },
+      { id: 4, smallBlind: 80, bigBlind: 160, ante: 0, duration: 3, isBreak: false },
+      { id: 5, smallBlind: 120, bigBlind: 240, ante: 0, duration: 3, isBreak: false },
+      { id: 6, smallBlind: 200, bigBlind: 400, ante: 0, duration: 3, isBreak: false },
+      { id: 7, smallBlind: 300, bigBlind: 600, ante: 0, duration: 3, isBreak: false },
+      { id: 8, smallBlind: 500, bigBlind: 1000, ante: 0, duration: 3, isBreak: false },
+      { id: 9, smallBlind: 800, bigBlind: 1600, ante: 0, duration: 3, isBreak: false },
+      { id: 10, smallBlind: 1200, bigBlind: 2400, ante: 0, duration: 3, isBreak: false },
+      { id: 11, smallBlind: 2000, bigBlind: 4000, ante: 0, duration: 3, isBreak: false },
+      { id: 12, smallBlind: 3000, bigBlind: 6000, ante: 0, duration: 3, isBreak: false },
+      { id: 13, smallBlind: 5000, bigBlind: 10000, ante: 0, duration: 3, isBreak: false },
+      { id: 14, smallBlind: 8000, bigBlind: 16000, ante: 0, duration: 3, isBreak: false },
+      { id: 15, smallBlind: 12000, bigBlind: 24000, ante: 0, duration: 3, isBreak: false },
+      { id: 16, smallBlind: 20000, bigBlind: 40000, ante: 0, duration: 3, isBreak: false },
+      { id: 17, smallBlind: 30000, bigBlind: 60000, ante: 0, duration: 3, isBreak: false },
+      { id: 18, smallBlind: 50000, bigBlind: 100000, ante: 0, duration: 3, isBreak: false },
+      { id: 19, smallBlind: 80000, bigBlind: 160000, ante: 0, duration: 3, isBreak: false },
+      { id: 20, smallBlind: 120000, bigBlind: 240000, ante: 0, duration: 3, isBreak: false },
+      { id: 21, smallBlind: 200000, bigBlind: 400000, ante: 0, duration: 3, isBreak: false },
+      { id: 22, smallBlind: 300000, bigBlind: 600000, ante: 0, duration: 3, isBreak: false },
+      { id: 23, smallBlind: 500000, bigBlind: 1000000, ante: 0, duration: 3, isBreak: false },
+      { id: 24, smallBlind: 800000, bigBlind: 1600000, ante: 0, duration: 3, isBreak: false },
+      { id: 25, smallBlind: 1200000, bigBlind: 2400000, ante: 0, duration: 3, isBreak: false },
+      { id: 26, smallBlind: 2000000, bigBlind: 4000000, ante: 0, duration: 3, isBreak: false },
+      { id: 27, smallBlind: 3000000, bigBlind: 6000000, ante: 0, duration: 3, isBreak: false },
+      { id: 28, smallBlind: 5000000, bigBlind: 10000000, ante: 0, duration: 3, isBreak: false },
+      { id: 29, smallBlind: 8000000, bigBlind: 16000000, ante: 0, duration: 3, isBreak: false },
+      { id: 30, smallBlind: 12000000, bigBlind: 24000000, ante: 0, duration: 3, isBreak: false }
+    ]
+  },
+  {
+    id: 'turbo-1',
+    name: 'ターボ1',
+    description: '1/2から始まるターボトーナメント（120分想定）',
+    blindLevels: [
+      { id: 0, smallBlind: 1, bigBlind: 2, ante: 0, duration: 3, isBreak: false },
+      { id: 1, smallBlind: 2, bigBlind: 4, ante: 0, duration: 3, isBreak: false },
+      { id: 2, smallBlind: 3, bigBlind: 6, ante: 0, duration: 3, isBreak: false },
+      { id: 3, smallBlind: 5, bigBlind: 10, ante: 0, duration: 3, isBreak: false },
+      { id: 4, smallBlind: 8, bigBlind: 16, ante: 0, duration: 3, isBreak: false },
+      { id: 5, smallBlind: 12, bigBlind: 24, ante: 0, duration: 3, isBreak: false },
+      { id: 6, smallBlind: 20, bigBlind: 40, ante: 0, duration: 3, isBreak: false },
+      { id: 7, smallBlind: 30, bigBlind: 60, ante: 0, duration: 3, isBreak: false },
+      { id: 8, smallBlind: 50, bigBlind: 100, ante: 0, duration: 3, isBreak: false },
+      { id: 9, smallBlind: 80, bigBlind: 160, ante: 0, duration: 3, isBreak: false },
+      { id: 10, smallBlind: 120, bigBlind: 240, ante: 0, duration: 3, isBreak: false },
+      { id: 11, smallBlind: 200, bigBlind: 400, ante: 0, duration: 3, isBreak: false },
+      { id: 12, smallBlind: 300, bigBlind: 600, ante: 0, duration: 3, isBreak: false },
+      { id: 13, smallBlind: 500, bigBlind: 1000, ante: 0, duration: 3, isBreak: false },
+      { id: 14, smallBlind: 800, bigBlind: 1600, ante: 0, duration: 3, isBreak: false },
+      { id: 15, smallBlind: 1200, bigBlind: 2400, ante: 0, duration: 3, isBreak: false },
+      { id: 16, smallBlind: 2000, bigBlind: 4000, ante: 0, duration: 3, isBreak: false },
+      { id: 17, smallBlind: 3000, bigBlind: 6000, ante: 0, duration: 3, isBreak: false },
+      { id: 18, smallBlind: 5000, bigBlind: 10000, ante: 0, duration: 3, isBreak: false },
+      { id: 19, smallBlind: 8000, bigBlind: 16000, ante: 0, duration: 3, isBreak: false },
+      { id: 20, smallBlind: 12000, bigBlind: 24000, ante: 0, duration: 3, isBreak: false },
+      { id: 21, smallBlind: 20000, bigBlind: 40000, ante: 0, duration: 3, isBreak: false },
+      { id: 22, smallBlind: 30000, bigBlind: 60000, ante: 0, duration: 3, isBreak: false },
+      { id: 23, smallBlind: 50000, bigBlind: 100000, ante: 0, duration: 3, isBreak: false },
+      { id: 24, smallBlind: 80000, bigBlind: 160000, ante: 0, duration: 3, isBreak: false },
+      { id: 25, smallBlind: 120000, bigBlind: 240000, ante: 0, duration: 3, isBreak: false },
+      { id: 26, smallBlind: 200000, bigBlind: 400000, ante: 0, duration: 3, isBreak: false },
+      { id: 27, smallBlind: 300000, bigBlind: 600000, ante: 0, duration: 3, isBreak: false },
+      { id: 28, smallBlind: 500000, bigBlind: 1000000, ante: 0, duration: 3, isBreak: false },
+      { id: 29, smallBlind: 800000, bigBlind: 1600000, ante: 0, duration: 3, isBreak: false },
+      { id: 30, smallBlind: 1200000, bigBlind: 2400000, ante: 0, duration: 3, isBreak: false }
+    ]
+  },
+  {
+    id: 'long-structure',
+    name: 'ロングストラクチャー',
+    description: '100/200から始まる店舗用ロングストラクチャー',
+    blindLevels: [
+      { id: 0, smallBlind: 100, bigBlind: 200, ante: 0, duration: 20, isBreak: false },
+      { id: 1, smallBlind: 200, bigBlind: 400, ante: 0, duration: 20, isBreak: false },
+      { id: 2, smallBlind: 300, bigBlind: 600, ante: 0, duration: 20, isBreak: false },
+      { id: 3, smallBlind: 500, bigBlind: 1000, ante: 0, duration: 20, isBreak: false },
+      { id: 4, smallBlind: 800, bigBlind: 1600, ante: 0, duration: 20, isBreak: false },
+      { id: 5, smallBlind: 1200, bigBlind: 2400, ante: 0, duration: 20, isBreak: false },
+      { id: 6, smallBlind: 2000, bigBlind: 4000, ante: 0, duration: 20, isBreak: false },
+      { id: 7, smallBlind: 3000, bigBlind: 6000, ante: 0, duration: 20, isBreak: false },
+      { id: 8, smallBlind: 5000, bigBlind: 10000, ante: 0, duration: 20, isBreak: false },
+      { id: 9, smallBlind: 8000, bigBlind: 16000, ante: 0, duration: 20, isBreak: false },
+      { id: 10, smallBlind: 12000, bigBlind: 24000, ante: 0, duration: 20, isBreak: false },
+      { id: 11, smallBlind: 20000, bigBlind: 40000, ante: 0, duration: 20, isBreak: false },
+      { id: 12, smallBlind: 30000, bigBlind: 60000, ante: 0, duration: 20, isBreak: false },
+      { id: 13, smallBlind: 50000, bigBlind: 100000, ante: 0, duration: 20, isBreak: false },
+      { id: 14, smallBlind: 80000, bigBlind: 160000, ante: 0, duration: 20, isBreak: false },
+      { id: 15, smallBlind: 120000, bigBlind: 240000, ante: 0, duration: 20, isBreak: false },
+      { id: 16, smallBlind: 200000, bigBlind: 400000, ante: 0, duration: 20, isBreak: false },
+      { id: 17, smallBlind: 300000, bigBlind: 600000, ante: 0, duration: 20, isBreak: false },
+      { id: 18, smallBlind: 500000, bigBlind: 1000000, ante: 0, duration: 20, isBreak: false },
+      { id: 19, smallBlind: 800000, bigBlind: 1600000, ante: 0, duration: 20, isBreak: false },
+      { id: 20, smallBlind: 1200000, bigBlind: 2400000, ante: 0, duration: 20, isBreak: false },
+      { id: 21, smallBlind: 2000000, bigBlind: 4000000, ante: 0, duration: 20, isBreak: false },
+      { id: 22, smallBlind: 3000000, bigBlind: 6000000, ante: 0, duration: 20, isBreak: false },
+      { id: 23, smallBlind: 5000000, bigBlind: 10000000, ante: 0, duration: 20, isBreak: false },
+      { id: 24, smallBlind: 8000000, bigBlind: 16000000, ante: 0, duration: 20, isBreak: false },
+      { id: 25, smallBlind: 12000000, bigBlind: 24000000, ante: 0, duration: 20, isBreak: false },
+      { id: 26, smallBlind: 20000000, bigBlind: 40000000, ante: 0, duration: 20, isBreak: false },
+      { id: 27, smallBlind: 30000000, bigBlind: 60000000, ante: 0, duration: 20, isBreak: false },
+      { id: 28, smallBlind: 50000000, bigBlind: 100000000, ante: 0, duration: 20, isBreak: false },
+      { id: 29, smallBlind: 80000000, bigBlind: 160000000, ante: 0, duration: 20, isBreak: false },
+      { id: 30, smallBlind: 120000000, bigBlind: 240000000, ante: 0, duration: 20, isBreak: false }
+    ]
+  }
 ];
 
 const initialDisplaySettings: DisplaySettings = {
@@ -298,7 +463,7 @@ export const usePokerStore = create<PokerState>()(
         const newLevels = levels.map((level, index) => ({
           ...level,
           id: index,
-          duration: level.duration || 15,
+          duration: level.duration || 0, // デフォルト値を15から0に変更
           isBreak: level.isBreak || false,
           smallBlind: level.isBreak ? 0 : level.smallBlind,
           bigBlind: level.isBreak ? 0 : level.bigBlind,
@@ -338,6 +503,39 @@ export const usePokerStore = create<PokerState>()(
           blindLevels: updatedLevels,
           blinds: updatedLevels,
           isBreak: false
+        });
+      },
+
+      updateAllBlindTimes: (time: number) => {
+        set((state) => {
+          const updatedLevels = state.blindLevels.map(level => ({
+            ...level,
+            duration: time
+          }));
+          
+          return {
+            blindLevels: updatedLevels,
+            blinds: updatedLevels,
+            currentTime: state.currentLevel === 0 ? time * 60 : state.currentTime
+          };
+        });
+      },
+
+      applyTournamentTemplate: (template: TournamentTemplate) => {
+        set((state) => {
+          const newLevels = template.blindLevels.map((level, index) => ({
+            ...level,
+            id: index
+          }));
+          
+          return {
+            blindLevels: newLevels,
+            blinds: newLevels,
+            currentLevel: 0,
+            currentTime: newLevels[0]?.duration * 60 || 0,
+            isRunning: false,
+            isBreak: newLevels[0]?.isBreak || false
+          };
         });
       },
 

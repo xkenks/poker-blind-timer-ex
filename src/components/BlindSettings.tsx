@@ -50,7 +50,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon, CheckIcon, ChevronUpIcon, ChevronDownIcon, DragHandleIcon } from '@chakra-ui/icons';
-import { usePokerStore, BlindLevel, Tournament } from '../store/pokerStore';
+import { usePokerStore, BlindLevel, Tournament, TournamentTemplate } from '../store/pokerStore';
 import {
   DndContext,
   closestCenter,
@@ -289,7 +289,6 @@ const SortableItem = ({
             <Text fontSize="xs" color="gray.500" mb={1}>SB</Text>
             <NumberInput
               value={0}
-              min={0}
               w="120px"
               size="lg"
               isReadOnly
@@ -309,7 +308,6 @@ const SortableItem = ({
             <Text fontSize="xs" color="gray.500" mb={1}>BB</Text>
             <NumberInput
               value={0}
-              min={0}
               w="120px"
               size="lg"
               isReadOnly
@@ -329,7 +327,6 @@ const SortableItem = ({
             <Text fontSize="xs" color="gray.500" mb={1}>Ante</Text>
             <NumberInput
               value={0}
-              min={0}
               w="120px"
               size="lg"
               isReadOnly
@@ -350,7 +347,6 @@ const SortableItem = ({
             <NumberInput
               value={time}
               onChange={(_, value) => onTimeChange(value)}
-              min={0}
               w="120px"
               size="lg"
             >
@@ -374,7 +370,6 @@ const SortableItem = ({
             <NumberInput
               value={sb}
               onChange={(_, value) => onSbChange(value)}
-              min={0}
               w="120px"
               size="lg"
             >
@@ -395,7 +390,6 @@ const SortableItem = ({
             <NumberInput
               value={bb}
               onChange={(_, value) => onBbChange(value)}
-              min={0}
               w="120px"
               size="lg"
             >
@@ -416,7 +410,6 @@ const SortableItem = ({
             <NumberInput
               value={ante}
               onChange={(_, value) => onAnteChange(value)}
-              min={0}
               w="120px"
               size="lg"
             >
@@ -437,7 +430,6 @@ const SortableItem = ({
             <NumberInput
               value={time}
               onChange={(_, value) => onTimeChange(value)}
-              min={0}
               w="120px"
               size="lg"
             >
@@ -477,8 +469,109 @@ export const BlindSettings = memo(() => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const resetConfirmRef = React.useRef<HTMLButtonElement>(null);
+  const [bulkTimeValue, setBulkTimeValue] = useState<number>(0);
 
-  const { blindLevels, updateBlindLevels, deleteBlindLevel, addBreak } = usePokerStore();
+  // トーナメントテンプレート
+  const tournamentTemplates: TournamentTemplate[] = [
+    {
+      id: 'turbo-100',
+      name: 'ターボ100',
+      description: '100/200から始まるターボトーナメント（60分~120分想定）',
+      blindLevels: [
+        { id: 0, smallBlind: 100, bigBlind: 200, ante: 200, duration: 6, isBreak: false },
+        { id: 1, smallBlind: 200, bigBlind: 400, ante: 400, duration: 6, isBreak: false },
+        { id: 2, smallBlind: 300, bigBlind: 600, ante: 600, duration: 6, isBreak: false },
+        { id: 3, smallBlind: 500, bigBlind: 1000, ante: 1000, duration: 6, isBreak: false },
+        { id: 4, smallBlind: 800, bigBlind: 1600, ante: 1600, duration: 6, isBreak: false },
+        { id: 5, smallBlind: 1200, bigBlind: 2400, ante: 2400, duration: 6, isBreak: false },
+        { id: 6, smallBlind: 2000, bigBlind: 4000, ante: 4000, duration: 6, isBreak: false },
+        { id: 7, smallBlind: 3000, bigBlind: 6000, ante: 6000, duration: 6, isBreak: false },
+        { id: 8, smallBlind: 5000, bigBlind: 10000, ante: 10000, duration: 6, isBreak: false },
+        { id: 9, smallBlind: 8000, bigBlind: 16000, ante: 16000, duration: 6, isBreak: false },
+        { id: 10, smallBlind: 12000, bigBlind: 24000, ante: 24000, duration: 6, isBreak: false },
+        { id: 11, smallBlind: 20000, bigBlind: 40000, ante: 40000, duration: 6, isBreak: false },
+        { id: 12, smallBlind: 30000, bigBlind: 60000, ante: 60000, duration: 6, isBreak: false },
+        { id: 13, smallBlind: 50000, bigBlind: 100000, ante: 100000, duration: 6, isBreak: false },
+        { id: 14, smallBlind: 80000, bigBlind: 160000, ante: 160000, duration: 6, isBreak: false },
+        { id: 15, smallBlind: 120000, bigBlind: 240000, ante: 240000, duration: 6, isBreak: false },
+        { id: 16, smallBlind: 200000, bigBlind: 400000, ante: 400000, duration: 6, isBreak: false }
+      ]
+    },
+    {
+      id: 'turbo-10',
+      name: 'ターボ10',
+      description: '10/20から始まるターボトーナメント（60分~120分想定）',
+      blindLevels: [
+        { id: 0, smallBlind: 10, bigBlind: 20, ante: 20, duration: 6, isBreak: false },
+        { id: 1, smallBlind: 20, bigBlind: 40, ante: 40, duration: 6, isBreak: false },
+        { id: 2, smallBlind: 30, bigBlind: 60, ante: 60, duration: 6, isBreak: false },
+        { id: 3, smallBlind: 50, bigBlind: 100, ante: 100, duration: 6, isBreak: false },
+        { id: 4, smallBlind: 80, bigBlind: 160, ante: 160, duration: 6, isBreak: false },
+        { id: 5, smallBlind: 120, bigBlind: 240, ante: 240, duration: 6, isBreak: false },
+        { id: 6, smallBlind: 200, bigBlind: 400, ante: 400, duration: 6, isBreak: false },
+        { id: 7, smallBlind: 300, bigBlind: 600, ante: 600, duration: 6, isBreak: false },
+        { id: 8, smallBlind: 500, bigBlind: 1000, ante: 1000, duration: 6, isBreak: false },
+        { id: 9, smallBlind: 800, bigBlind: 1600, ante: 1600, duration: 6, isBreak: false },
+        { id: 10, smallBlind: 1200, bigBlind: 2400, ante: 2400, duration: 6, isBreak: false },
+        { id: 11, smallBlind: 2000, bigBlind: 4000, ante: 4000, duration: 6, isBreak: false },
+        { id: 12, smallBlind: 3000, bigBlind: 6000, ante: 6000, duration: 6, isBreak: false },
+        { id: 13, smallBlind: 5000, bigBlind: 10000, ante: 10000, duration: 6, isBreak: false },
+        { id: 14, smallBlind: 8000, bigBlind: 16000, ante: 16000, duration: 6, isBreak: false },
+        { id: 15, smallBlind: 12000, bigBlind: 24000, ante: 24000, duration: 6, isBreak: false },
+        { id: 16, smallBlind: 20000, bigBlind: 40000, ante: 40000, duration: 6, isBreak: false }
+      ]
+    },
+    {
+      id: 'turbo-1',
+      name: 'ターボ1',
+      description: '1/2から始まるターボトーナメント（60分~120分想定）',
+      blindLevels: [
+        { id: 0, smallBlind: 1, bigBlind: 2, ante: 2, duration: 6, isBreak: false },
+        { id: 1, smallBlind: 2, bigBlind: 4, ante: 4, duration: 6, isBreak: false },
+        { id: 2, smallBlind: 3, bigBlind: 6, ante: 6, duration: 6, isBreak: false },
+        { id: 3, smallBlind: 5, bigBlind: 10, ante: 10, duration: 6, isBreak: false },
+        { id: 4, smallBlind: 8, bigBlind: 16, ante: 16, duration: 6, isBreak: false },
+        { id: 5, smallBlind: 12, bigBlind: 24, ante: 24, duration: 6, isBreak: false },
+        { id: 6, smallBlind: 20, bigBlind: 40, ante: 40, duration: 6, isBreak: false },
+        { id: 7, smallBlind: 30, bigBlind: 60, ante: 60, duration: 6, isBreak: false },
+        { id: 8, smallBlind: 50, bigBlind: 100, ante: 100, duration: 6, isBreak: false },
+        { id: 9, smallBlind: 80, bigBlind: 160, ante: 160, duration: 6, isBreak: false },
+        { id: 10, smallBlind: 120, bigBlind: 240, ante: 240, duration: 6, isBreak: false },
+        { id: 11, smallBlind: 200, bigBlind: 400, ante: 400, duration: 6, isBreak: false },
+        { id: 12, smallBlind: 300, bigBlind: 600, ante: 600, duration: 6, isBreak: false },
+        { id: 13, smallBlind: 500, bigBlind: 1000, ante: 1000, duration: 6, isBreak: false },
+        { id: 14, smallBlind: 800, bigBlind: 1600, ante: 1600, duration: 6, isBreak: false },
+        { id: 15, smallBlind: 1200, bigBlind: 2400, ante: 2400, duration: 6, isBreak: false },
+        { id: 16, smallBlind: 2000, bigBlind: 4000, ante: 4000, duration: 6, isBreak: false }
+      ]
+    },
+    {
+      id: 'long-structure',
+      name: 'ロングストラクチャー',
+      description: '100/200から始まる店舗用ロングストラクチャー',
+      blindLevels: [
+        { id: 0, smallBlind: 100, bigBlind: 200, ante: 200, duration: 20, isBreak: false },
+        { id: 1, smallBlind: 200, bigBlind: 400, ante: 400, duration: 20, isBreak: false },
+        { id: 2, smallBlind: 300, bigBlind: 600, ante: 600, duration: 20, isBreak: false },
+        { id: 3, smallBlind: 500, bigBlind: 1000, ante: 1000, duration: 20, isBreak: false },
+        { id: 4, smallBlind: 800, bigBlind: 1600, ante: 1600, duration: 20, isBreak: false },
+        { id: 5, smallBlind: 1200, bigBlind: 2400, ante: 2400, duration: 20, isBreak: false },
+        { id: 6, smallBlind: 2000, bigBlind: 4000, ante: 4000, duration: 20, isBreak: false },
+        { id: 7, smallBlind: 3000, bigBlind: 6000, ante: 6000, duration: 20, isBreak: false },
+        { id: 8, smallBlind: 5000, bigBlind: 10000, ante: 10000, duration: 20, isBreak: false },
+        { id: 9, smallBlind: 8000, bigBlind: 16000, ante: 16000, duration: 20, isBreak: false },
+        { id: 10, smallBlind: 12000, bigBlind: 24000, ante: 24000, duration: 20, isBreak: false },
+        { id: 11, smallBlind: 20000, bigBlind: 40000, ante: 40000, duration: 20, isBreak: false },
+        { id: 12, smallBlind: 30000, bigBlind: 60000, ante: 60000, duration: 20, isBreak: false },
+        { id: 13, smallBlind: 50000, bigBlind: 100000, ante: 100000, duration: 20, isBreak: false },
+        { id: 14, smallBlind: 80000, bigBlind: 160000, ante: 160000, duration: 20, isBreak: false },
+        { id: 15, smallBlind: 120000, bigBlind: 240000, ante: 240000, duration: 20, isBreak: false },
+        { id: 16, smallBlind: 200000, bigBlind: 400000, ante: 400000, duration: 20, isBreak: false }
+      ]
+    }
+  ];
+
+  const { blindLevels, updateBlindLevels, updateAllBlindTimes, applyTournamentTemplate, deleteBlindLevel, addBreak } = usePokerStore();
   const savedTournaments = usePokerStore(state => state.savedTournaments);
   const saveTournament = usePokerStore(state => state.saveTournament);
   const loadTournament = usePokerStore(state => state.loadTournament);
@@ -540,7 +633,8 @@ export const BlindSettings = memo(() => {
     field: 'smallBlind' | 'bigBlind' | 'ante' | 'duration',
     value: string
   ) => {
-    const newValue = parseInt(value) || 0;
+    // 空文字列の場合は0、それ以外は数値に変換
+    const newValue = value === '' ? 0 : parseInt(value) || 0;
     const newLevels = blindLevels.map((level, i) => {
       if (i === index) {
         return { ...level, [field]: newValue };
@@ -572,6 +666,41 @@ export const BlindSettings = memo(() => {
       isClosable: true,
     });
   }, [updateBlindLevels, toast]);
+
+  const handleBulkTimeUpdate = useCallback(() => {
+    if (!bulkTimeValue || bulkTimeValue <= 0) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a valid time value',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    updateAllBlindTimes(bulkTimeValue);
+    
+    toast({
+      title: 'Updated',
+      description: `All blind levels updated to ${bulkTimeValue} minutes`,
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+  }, [bulkTimeValue, updateAllBlindTimes, toast]);
+
+  const handleTemplateApply = useCallback((template: TournamentTemplate) => {
+    applyTournamentTemplate(template);
+    
+    toast({
+      title: 'Template Applied',
+      description: `${template.name} template has been applied`,
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+  }, [applyTournamentTemplate, toast]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -686,6 +815,83 @@ export const BlindSettings = memo(() => {
                   <Text fontSize="sm" color="gray.600" mt={[2, 0]}>
                     *You can drag & drop to change order
                   </Text>
+                </Box>
+                
+                {/* 一括時間設定 */}
+                <Box 
+                  bgColor="blue.50"
+                  borderWidth="1px"
+                  borderColor="blue.200"
+                  borderRadius="md"
+                  p={4}
+                >
+                  <HStack spacing={4} align="center" flexWrap="wrap">
+                    <Text fontWeight="bold" fontSize="sm" color="blue.700">
+                      一括時間設定:
+                    </Text>
+                    <NumberInput
+                      value={bulkTimeValue}
+                      onChange={(_, value) => setBulkTimeValue(value)}
+                      w="120px"
+                      size="md"
+                    >
+                      <NumberInputField
+                        fontSize="14px"
+                        textAlign="right"
+                        paddingRight="8px"
+                        height="36px"
+                        fontWeight="bold"
+                        borderColor="blue.300"
+                        _hover={{ borderColor: "blue.400" }}
+                        bg="white"
+                      />
+                    </NumberInput>
+                    <Text fontSize="sm" color="gray.600">
+                      分
+                    </Text>
+                    <Button
+                      size="sm"
+                      colorScheme="blue"
+                      variant="solid"
+                      onClick={handleBulkTimeUpdate}
+                      isDisabled={!bulkTimeValue || bulkTimeValue <= 0}
+                    >
+                      全てのブラインドに適用
+                    </Button>
+                  </HStack>
+                </Box>
+                
+                {/* トーナメントテンプレート */}
+                <Box 
+                  bgColor="green.50"
+                  borderWidth="1px"
+                  borderColor="green.200"
+                  borderRadius="md"
+                  p={4}
+                >
+                  <Text fontWeight="bold" fontSize="sm" color="green.700" mb={3}>
+                    トーナメントテンプレート
+                  </Text>
+                  <VStack spacing={3} align="stretch">
+                    {tournamentTemplates.map((template) => (
+                      <Box key={template.id}>
+                        <HStack spacing={3} align="center" flexWrap="wrap">
+                          <Button
+                            size="sm"
+                            colorScheme="green"
+                            variant="solid"
+                            onClick={() => handleTemplateApply(template)}
+                            minW="120px"
+                          >
+                            {template.name}
+                          </Button>
+                          <Text fontSize="xs" color="gray.600" flex={1}>
+                            {template.description}
+                          </Text>
+                        </HStack>
+                      </Box>
+                    ))}
+                  </VStack>
                 </Box>
                 
                 <Box 
