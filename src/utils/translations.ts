@@ -51,7 +51,6 @@ export const translations = {
     remaining: '残り',
     
     // 賞金設定
-    prizePool: '賞金プール',
     position: '順位',
     prize: '賞金',
     addPrize: '賞金追加',
@@ -72,7 +71,6 @@ export const translations = {
     // ボタン・アクション
     start: '開始',
     pause: '一時停止',
-    reset: 'リセット',
     next: '次へ',
     previous: '前へ',
     settings: '設定',
@@ -149,7 +147,6 @@ export const translations = {
     remaining: 'Remaining',
     
     // 賞金設定
-    prizePool: 'Prize Pool',
     position: 'Position',
     prize: 'Prize',
     addPrize: 'Add Prize',
@@ -170,7 +167,6 @@ export const translations = {
     // ボタン・アクション
     start: 'Start',
     pause: 'Pause',
-    reset: 'Reset',
     next: 'Next',
     previous: 'Previous',
     settings: 'Settings',
