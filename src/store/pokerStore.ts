@@ -89,7 +89,6 @@ export interface PokerState {
   blinds: BlindLevel[];
   currentBlindIndex: number;
   decrementTimer: () => number;
-  prizes: Prize[];
   updateSoundSettings: (warningSoundType: SoundType, levelChangeSoundType: SoundType) => void;
   resetPlayerState: () => void;
   resetPrizePool: () => void;
@@ -300,16 +299,11 @@ const initialPlayerState: PlayerState = {
 };
 
 const initialPrizePool: Prize[] = [
-  { id: 1, position: 1, type: 'USD', amount: 0 },
-  { id: 2, position: 2, type: 'USD', amount: 0 },
-  { id: 3, position: 3, type: 'USD', amount: 0 },
+  { id: 1, position: 1, type: 'JPY', amount: 0 },
+  { id: 2, position: 2, type: 'JPY', amount: 0 },
+  { id: 3, position: 3, type: 'JPY', amount: 0 },
 ];
 
-const initialPrizePools = [
-  { rank: '1st', amount: 0, type: 'money' },
-  { rank: '2nd', amount: 0, type: 'money' },
-  { rank: '3rd', amount: 0, type: 'money' },
-];
 
 export const usePokerStore = create<PokerState>()(
   persist(
@@ -323,14 +317,8 @@ export const usePokerStore = create<PokerState>()(
       displaySettings: initialDisplaySettings,
       playerState: initialPlayerState,
       prizePool: initialPrizePool,
-      prizePools: initialPrizePools,
       blinds: initialBlindLevels,
       currentBlindIndex: 0,
-      prizes: [
-        { id: 1, position: 1, amount: 0, type: 'USD' },
-        { id: 2, position: 2, amount: 0, type: 'USD' },
-        { id: 3, position: 3, amount: 0, type: 'USD' }
-      ],
       isBreak: false,
       
       startTimer: () => set({ isRunning: true }),
@@ -343,7 +331,6 @@ export const usePokerStore = create<PokerState>()(
           currentLevel: 0,
           currentTime: firstLevel.duration * 60,
           isRunning: false,
-          prizes: [],
           isBreak: firstLevel.isBreak || false
         });
       },
@@ -433,8 +420,7 @@ export const usePokerStore = create<PokerState>()(
         })),
 
       updatePrizePool: (prizes: Prize[]) => set({ 
-        prizePool: prizes,
-        prizes: prizes 
+        prizePool: prizes
       }),
 
       deleteBlindLevel: (id: number) => {
@@ -611,8 +597,7 @@ export const usePokerStore = create<PokerState>()(
 
       resetPrizePool: () => {
         set({ 
-          prizePool: initialPrizePool,
-          prizes: initialPrizePool
+          prizePool: initialPrizePool
         });
       },
     }),
@@ -648,7 +633,7 @@ export const usePokerStore = create<PokerState>()(
           playerState: state.playerState,
           currentTime: state.currentTime,
           isBreak: state.isBreak,
-          prizes: state.prizes
+          prizePool: state.prizePool
         };
       },
     }

@@ -53,26 +53,26 @@ const prizeTypeOptions = [
 ];
 
 export const PrizePoolSettings = () => {
-  const { prizes, updatePrizePool, resetPrizePool } = usePokerStore();
-  const [localPrizes, setLocalPrizes] = useState<Prize[]>(prizes);
+  const { prizePool, updatePrizePool, resetPrizePool } = usePokerStore();
+  const [localPrizes, setLocalPrizes] = useState<Prize[]>(prizePool);
 
   // コンポーネントマウント時の初期化
   useEffect(() => {
-    if (prizes.length === 0) {
+    if (prizePool.length === 0) {
       // 初期の賞金構造を設定
       const initialPrizes: Prize[] = [
-        { id: 1, position: 1, amount: 0, type: 'USD' },
-        { id: 2, position: 2, amount: 0, type: 'USD' },
-        { id: 3, position: 3, amount: 0, type: 'USD' }
+        { id: 1, position: 1, amount: 0, type: 'JPY' },
+        { id: 2, position: 2, amount: 0, type: 'JPY' },
+        { id: 3, position: 3, amount: 0, type: 'JPY' }
       ];
       updatePrizePool(initialPrizes);
     }
   }, []);
 
-  // prizesの変更を監視して同期を取る
+  // prizePoolの変更を監視して同期を取る
   useEffect(() => {
-    setLocalPrizes(prizes);
-  }, [prizes]);
+    setLocalPrizes(prizePool);
+  }, [prizePool]);
 
   const handlePrizeChange = (index: number, field: string, value: string | number) => {
     const newPrizes = [...localPrizes];
@@ -97,7 +97,7 @@ export const PrizePoolSettings = () => {
       id: localPrizes.length + 1,
       position: localPrizes.length + 1,
       amount: 0,
-      type: 'USD'
+      type: 'JPY'
     };
     const updatedPrizes = [...localPrizes, newPrize];
     setLocalPrizes(updatedPrizes);
