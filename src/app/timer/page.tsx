@@ -18,11 +18,13 @@ import {
   ModalCloseButton,
   ModalBody,
   IconButton,
+  Flex,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, SettingsIcon } from '@chakra-ui/icons';
 import { FaHome } from 'react-icons/fa';
 import Link from 'next/link';
 import { usePokerStore } from '../../store/pokerStore';
+import { useLanguageStore } from '../../store/languageStore';
 import { Timer } from '../../components/Timer';
 import { PrizePool } from '../../components/PrizePool';
 import { formatTime } from '../../utils/timeUtils';
@@ -30,6 +32,24 @@ import { BlindSettings } from '../../components/BlindSettings';
 import { PlayerManager } from '../../components/PlayerManager';
 import { PrizePoolSettings } from '../../components/PrizePoolSettings';
 import { DisplaySettings } from '../../components/DisplaySettings';
+
+// 言語切り替えコンポーネント
+const LanguageToggle = () => {
+  const { language, setLanguage } = useLanguageStore();
+  
+  return (
+    <Button
+      size="sm"
+      colorScheme="blue"
+      variant="solid"
+      onClick={() => setLanguage(language === 'ja' ? 'en' : 'ja')}
+      _hover={{ bg: 'blue.600' }}
+      fontWeight="bold"
+    >
+      {language === 'ja' ? 'ENGLISH' : '日本語'}
+    </Button>
+  );
+};
 
 const TimerPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -367,6 +387,7 @@ const TimerPage = () => {
           />
         </Link>
 
+
         {/* 設定モーダル */}
         <Modal 
           isOpen={isModalOpen} 
@@ -378,12 +399,17 @@ const TimerPage = () => {
         >
           <ModalOverlay />
           <ModalContent bg="white" color="black" maxW="1000px" mx={4}>
-            <ModalHeader borderBottom="1px" borderColor="gray.200">Tournament Settings</ModalHeader>
+            <ModalHeader borderBottom="1px" borderColor="gray.200">
+              <Flex align="center" gap={4}>
+                <Text fontSize="lg" fontWeight="bold">Tournament Settings</Text>
+                <LanguageToggle />
+              </Flex>
+            </ModalHeader>
             <ModalCloseButton onClick={closeModal} />
             <ModalBody pb={6} pt={4}>
               <VStack spacing={6} width="100%" maxW="900px" mx="auto">
-                <BlindSettings />
                 <PlayerManager />
+                <BlindSettings />
                 <PrizePoolSettings />
                 <DisplaySettings />
               </VStack>

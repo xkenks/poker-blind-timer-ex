@@ -51,6 +51,7 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon, CheckIcon, ChevronUpIcon, ChevronDownIcon, DragHandleIcon } from '@chakra-ui/icons';
 import { usePokerStore, BlindLevel, Tournament, TournamentTemplate } from '../store/pokerStore';
+import { useTranslation } from '../utils/translations';
 import {
   DndContext,
   closestCenter,
@@ -461,6 +462,7 @@ const SortableItem = ({
 export const BlindSettings = memo(() => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const t = useTranslation();
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const [newTournamentName, setNewTournamentName] = useState('');
   const [selectedTournamentId, setSelectedTournamentId] = useState<string | null>(null);
@@ -803,17 +805,17 @@ export const BlindSettings = memo(() => {
       >
         <Tabs width="100%">
           <TabList>
-            <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>Blind Settings</Tab>
-            <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>Saved Tournaments</Tab>
+            <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>{t('blindSettings')}</Tab>
+            <Tab fontWeight="bold" _selected={{ color: "blue.500", borderColor: "blue.500" }}>{t('savedTournaments')}</Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel>
               <VStack spacing={4} align="stretch" w="full">
                 <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-                  <Heading size="md">Blind Settings</Heading>
+                  <Heading size="md">{t('blindSettings')}</Heading>
                   <Text fontSize="sm" color="gray.600" mt={[2, 0]}>
-                    *You can drag & drop to change order
+                    *{t('dragToReorder')}
                   </Text>
                 </Box>
                 
@@ -1118,7 +1120,7 @@ export const BlindSettings = memo(() => {
             <TabPanel>
               <VStack spacing={4} align="stretch">
                 <Text fontSize="xl" fontWeight="bold">
-                  Saved Tournaments
+                  {t('savedTournaments')}
                 </Text>
                 <Box
                   bgColor="white"

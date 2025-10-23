@@ -29,6 +29,7 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon, RepeatIcon } from '@chakra-ui/icons';
 import { usePokerStore, Prize } from '../store/pokerStore';
+import { useTranslation } from '../utils/translations';
 
 const PRIZE_TYPES = {
   JPY: { label: '¥', prefix: '¥', color: 'green' },
@@ -53,6 +54,7 @@ const prizeTypeOptions = [
 ];
 
 export const PrizePoolSettings = () => {
+  const t = useTranslation();
   const { prizePool, updatePrizePool, resetPrizePool } = usePokerStore();
   const [localPrizes, setLocalPrizes] = useState<Prize[]>(prizePool);
 
@@ -161,7 +163,7 @@ export const PrizePoolSettings = () => {
           flexDir={["column", "column", "row"]}
           gap={2}
         >
-          <Text fontSize={["lg", "xl"]} fontWeight="bold">Prize Pool Settings</Text>
+          <Text fontSize={["lg", "xl"]} fontWeight="bold">{t('prizePoolSettings')}</Text>
           <HStack spacing={2}>
             <Button
               leftIcon={<RepeatIcon />}
@@ -170,7 +172,7 @@ export const PrizePoolSettings = () => {
               size={["sm", "md"]}
               onClick={resetPrizePool}
             >
-              Reset
+              {t('reset')}
             </Button>
             <Button
               leftIcon={<AddIcon />}
@@ -179,7 +181,7 @@ export const PrizePoolSettings = () => {
               size={["sm", "md"]}
               onClick={handleAddPrize}
             >
-              Add Prize
+              {t('addPrize')}
             </Button>
           </HStack>
         </Flex>
@@ -219,7 +221,7 @@ export const PrizePoolSettings = () => {
               </Flex>
               
               <FormControl mb={3}>
-                <FormLabel fontSize="sm" mb={1}>Prize Amount</FormLabel>
+                <FormLabel fontSize="sm" mb={1}>{t('prize')}</FormLabel>
                 {prize.type === 'ITEM' ? (
                   <Input
                     value={prize.amount}
@@ -244,7 +246,7 @@ export const PrizePoolSettings = () => {
               </FormControl>
               
               <FormControl mb={3}>
-                <FormLabel fontSize="sm" mb={1}>Prize Type</FormLabel>
+                <FormLabel fontSize="sm" mb={1}>{t('prize')} Type</FormLabel>
                 <Select
                   value={prize.type}
                   onChange={(e) => handlePrizeChange(index, 'type', e.target.value)}
@@ -279,10 +281,10 @@ export const PrizePoolSettings = () => {
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="100px">Position</Th>
-                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="200px">Prize Amount</Th>
-                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="120px">Prize Type</Th>
-                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="80px">Action</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="100px">{t('position')}</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="200px">{t('prize')}</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="120px">{t('prize')} Type</Th>
+                <Th fontSize={["sm", "md", "16px"]} textAlign="center" width="80px">{t('action')}</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -358,7 +360,7 @@ export const PrizePoolSettings = () => {
           borderColor="blue.200"
         >
           <Text fontWeight="bold" color="blue.800" mb={2}>
-            Total Prize Pool
+            {t('prizePool')}
           </Text>
           <HStack spacing={4} flexWrap="wrap">
             {localPrizes.some(p => p.type === 'JPY') && (

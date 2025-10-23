@@ -33,8 +33,10 @@ import {
 } from '@chakra-ui/react';
 import { RepeatIcon } from '@chakra-ui/icons';
 import { usePokerStore } from '../store/pokerStore';
+import { useTranslation } from '../utils/translations';
 
 export const PlayerManager = () => {
+  const t = useTranslation();
   const {
     playerState,
     updatePlayerState,
@@ -77,7 +79,7 @@ export const PlayerManager = () => {
           size="sm"
           onClick={resetPlayerState}
         >
-          Reset
+          {t('reset')}
         </Button>
       </Flex>
 
@@ -89,13 +91,13 @@ export const PlayerManager = () => {
             <CardBody>
               <Flex direction="column" align="center" justify="center">
                 <Badge colorScheme="blue" fontSize="md" mb={3} p={2} borderRadius="md">
-                  Current Status
+                  {t('currentStatus')}
                 </Badge>
                 <Text fontSize="xl" fontWeight="bold" color="gray.700" textAlign="center">
                   {currentPlayers}/{totalPlayers} Players
                 </Text>
                 <Text fontSize="lg" fontWeight="medium" color="gray.700" textAlign="center" mt={2}>
-                  Average Stack: {averageStack.toLocaleString()}
+                  {t('averageStack')}: {averageStack.toLocaleString()}
                 </Text>
               </Flex>
             </CardBody>
@@ -105,7 +107,7 @@ export const PlayerManager = () => {
           <Card shadow="md" borderRadius="lg">
             <CardHeader pb={1}>
               <FormLabel fontSize="md" fontWeight="bold" mb={0}>
-                Initial Players
+                {t('initialPlayers')}
               </FormLabel>
             </CardHeader>
             <CardBody pt={2}>
@@ -144,7 +146,7 @@ export const PlayerManager = () => {
           <Card shadow="md" borderRadius="lg">
             <CardHeader pb={1}>
               <FormLabel fontSize="md" fontWeight="bold" mb={0}>
-                Rebuys
+                {t('rebuys')}
               </FormLabel>
             </CardHeader>
             <CardBody pt={2}>
@@ -183,7 +185,7 @@ export const PlayerManager = () => {
           <Card shadow="md" borderRadius="lg">
             <CardHeader pb={1}>
               <FormLabel fontSize="md" fontWeight="bold" mb={0}>
-                Eliminated Players
+                {t('eliminatedPlayers')}
               </FormLabel>
             </CardHeader>
             <CardBody pt={2}>
@@ -223,7 +225,7 @@ export const PlayerManager = () => {
           <Card shadow="md" borderRadius="lg">
             <CardHeader pb={1}>
               <FormLabel fontSize="md" fontWeight="bold" mb={0}>
-                Initial Stack
+                {t('initialStack')}
               </FormLabel>
             </CardHeader>
             <CardBody pt={2}>
@@ -268,12 +270,12 @@ export const PlayerManager = () => {
             <Tr>
               <Th width="200px" fontSize={["sm", "md"]}>Item</Th>
               <Th fontSize={["sm", "md"]}>Value</Th>
-              <Th width="200px" fontSize={["sm", "md"]}>Current Status</Th>
+              <Th width="200px" fontSize={["sm", "md"]}>{t('currentStatus')}</Th>
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
-              <Td fontWeight="medium">Initial Players</Td>
+              <Td fontWeight="medium">{t('initialPlayers')}</Td>
               <Td>
                 <NumberInput
                   value={initialPlayers}
@@ -307,7 +309,7 @@ export const PlayerManager = () => {
             </Tr>
             
             <Tr>
-              <Td fontWeight="medium">Rebuys</Td>
+              <Td fontWeight="medium">{t('rebuys')}</Td>
               <Td>
                 <NumberInput
                   value={rebuys}
@@ -341,7 +343,7 @@ export const PlayerManager = () => {
             </Tr>
             
             <Tr>
-              <Td fontWeight="medium">Eliminated Players</Td>
+              <Td fontWeight="medium">{t('eliminatedPlayers')}</Td>
               <Td>
                 <NumberInput
                   value={playersOut}
@@ -376,7 +378,7 @@ export const PlayerManager = () => {
             </Tr>
             
             <Tr>
-              <Td fontWeight="medium">Initial Stack</Td>
+              <Td fontWeight="medium">{t('initialStack')}</Td>
               <Td>
                 <NumberInput
                   value={initialStack}
@@ -411,14 +413,14 @@ export const PlayerManager = () => {
             </Tr>
 
             <Tr bg="gray.50">
-              <Td fontWeight="bold">Current Status</Td>
+              <Td fontWeight="bold">{t('currentStatus')}</Td>
               <Td colSpan={2}>
                 <Flex align="center" gap={4}>
                   <Badge colorScheme="blue" p={2} borderRadius="md" fontSize="md">
-                    Remaining {currentPlayers}/{totalPlayers} players
+                    {t('remaining')} {currentPlayers}/{totalPlayers} {t('players')}
                   </Badge>
                   <Badge colorScheme="purple" p={2} borderRadius="md" fontSize="md">
-                    Average Stack: {averageStack.toLocaleString()}
+                    {t('averageStack')}: {averageStack.toLocaleString()}
                   </Badge>
                 </Flex>
               </Td>

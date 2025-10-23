@@ -24,6 +24,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { usePokerStore } from '../store/pokerStore';
+import { useTranslation } from '../utils/translations';
 import { InfoIcon } from '@chakra-ui/icons';
 import { SoundType, updateSoundSettings as updateGlobalSoundSettings, playWarningSound as previewWarningSound, initAudio } from '../utils/soundUtils';
 
@@ -34,6 +35,7 @@ type ColorOption = {
 };
 
 export const DisplaySettings = () => {
+  const t = useTranslation();
   const { displaySettings, updateDisplaySettings, updateSoundSettings } = usePokerStore();
   const [selectedBgColor, setSelectedBgColor] = React.useState<string>(displaySettings.backgroundColor);
   const [selectedTextColor, setSelectedTextColor] = React.useState<string>(displaySettings.textColor);
@@ -250,10 +252,10 @@ export const DisplaySettings = () => {
     >
       <Flex align="center" mb={6}>
         <Text fontSize={["xl", "2xl"]} fontWeight="bold">
-          Display Settings
+          {t('displaySettings')}
         </Text>
         <Badge ml={3} colorScheme="blue" fontSize="sm">
-          Customization
+          {t('customization')}
         </Badge>
       </Flex>
 
@@ -301,7 +303,7 @@ export const DisplaySettings = () => {
               fontWeight: 'semibold'
             }}
           >
-            Text Color
+            {t('textColor')}
           </Tab>
           <Tab 
             fontSize={["xs", "sm", "md"]}
@@ -323,7 +325,7 @@ export const DisplaySettings = () => {
             <VStack spacing={4} align="stretch">
               <Flex align="center" mb={2}>
                 <Text fontSize={["sm", "md"]} fontWeight="semibold">
-                  Background Color
+                  {t('backgroundColor')}
                 </Text>
                 <Tooltip label="Choose a dark background color for better visibility" hasArrow>
                   <Icon as={InfoIcon} ml={2} color="blue.500" />
@@ -364,7 +366,7 @@ export const DisplaySettings = () => {
               <Box>
                 <Flex align="center" mb={2}>
                   <Text fontSize={["sm", "md"]} fontWeight="semibold">
-                    Info Text Color
+                    {t('textColor')}
                   </Text>
                   <Tooltip label="This color will be used for important information text" hasArrow>
                     <Icon as={InfoIcon} ml={2} color="blue.500" />
